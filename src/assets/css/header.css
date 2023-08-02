@@ -1,0 +1,15 @@
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+  padding: 0 30px;
+  height: 80px;
+  background-color: #f7fafc;
+  border-bottom: 1px solid #ecececdd;
+}
+.header-username {
+  font-weight: 600;
+  color: #3d3d3d;
+}
