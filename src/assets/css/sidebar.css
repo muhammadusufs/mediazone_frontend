@@ -52,7 +52,7 @@
   display: inline-block;
   font-family: "Poppins";
   word-spacing: 3px;
-  border-radius: 5px;
+  border-radius: 15px;
   padding: 15px 15px;
   width: 100%;
   display: flex;
@@ -75,12 +75,17 @@
 }
 
 .menu-list-item a:hover {
-  background-color: #fff1ed;
+  background-color: #ffcfc2;
   color: #3d3d3d;
 }
 
 .logout:hover {
   background-color: #f14363 !important;
+}
+.active-list-item a {
+  background-color: #ffcfc2;
+  color: #3d3d3d;
+  border-radius: 15px;
 }
 
 .mobile-container {

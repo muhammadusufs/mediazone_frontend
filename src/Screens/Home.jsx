@@ -10,6 +10,7 @@ import {
   Button,
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
+import barcode from "../assets/imgs/barcod.png";
 
 const Home = () => {
   const [sid, setSid] = useState("");
@@ -17,7 +18,7 @@ const Home = () => {
     setSid(value);
   };
   return (
-    <Layout>
+    <Layout url="home">
       <form>
         <TextField
           fullWidth
@@ -37,177 +38,246 @@ const Home = () => {
           marginTop: 3,
         }}
       >
-        <Typography variant="h4" sx={{ fontWeight: 500 }} component={"h2"}>
-          Raximov Og'abek Naimjon o'g'li
-        </Typography>
+        <Grid container>
+          <Grid item xs={12} sm={12} md={8} lg={8}>
+            <Typography variant="h4" sx={{ fontWeight: 500 }} component={"h2"}>
+              Raximov Og'abek Naimjon o'g'li
+            </Typography>
 
-        <Typography variant="subtitle1" sx={{ mt: 2 }} component={"h2"}>
-          Holati : AKTIV
-        </Typography>
+            <Typography variant="subtitle1" sx={{ mt: 2 }} component={"h2"}>
+              Holati : AKTIV
+            </Typography>
 
-        <Typography variant="subtitle1" component={"h2"}>
-          Guruhlar
-        </Typography>
-        <ul style={{ marginLeft: "30px" }}>
-          <li style={{ marginBottom: 5 }}>
-            <div style={{ display: "flex" }}>
-              <div style={{ width: "130px", overflow: "hidden" }}>
-                <Chip
-                  label="IT masters"
-                  sx={{ mr: 1 }}
-                  size="small"
-                  color="secondary"
-                />
-              </div>
+            <Typography variant="subtitle1" component={"h2"}>
+              Guruhlar
+            </Typography>
+            <ul style={{ marginLeft: "30px" }}>
+              <li style={{ marginBottom: 5 }}>
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  <div style={{ width: "130px", overflow: "hidden" }}>
+                    <Chip
+                      label="IT masters"
+                      sx={{ mr: 1, mb: 2 }}
+                      size="small"
+                      color="secondary"
+                    />
+                  </div>
 
-              <Chip
-                label="Yanvar"
-                sx={{ mr: 1 }}
+                  <Chip
+                    label="Yanvar"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Fevral"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Mart"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Aprel"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="May"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Iyun"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Iyul"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Avgust"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label={"Sentyabr +"}
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Oktyabr"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Noyabr"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Dekabr"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                </div>
+              </li>
+              <li style={{}}>
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  <div style={{ width: "130px", overflow: "hidden" }}>
+                    <Chip
+                      label="IT masters"
+                      sx={{ mr: 1, mb: 2 }}
+                      size="small"
+                      color="secondary"
+                    />
+                  </div>
+
+                  <Chip
+                    label="Yanvar"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Fevral"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Mart"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Aprel"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="May"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Iyun"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Iyul"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Avgust"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label={"Sentyabr +"}
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Oktyabr"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Noyabr"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                  <Chip
+                    label="Dekabr"
+                    sx={{ mr: 1, mb: 2 }}
+                    size="small"
+                    color="primary"
+                  />
+                </div>
+              </li>
+            </ul>
+
+            <div
+              style={{
+                marginTop: "30px",
+                display: "flex",
+                gap: "10px",
+              }}
+            >
+              <TextField
+                id="standard-basic"
+                label="IT masters"
+                variant="filled"
+                color="dark"
                 size="small"
-                color="primary"
               />
-              <Chip
-                label="Fevral"
-                sx={{ mr: 1 }}
-                size="small"
-                color="primary"
-              />
-              <Chip label="Mart" sx={{ mr: 1 }} size="small" color="primary" />
-              <Chip label="Aprel" sx={{ mr: 1 }} size="small" color="primary" />
-              <Chip label="May" sx={{ mr: 1 }} size="small" color="primary" />
-              <Chip label="Iyun" sx={{ mr: 1 }} size="small" color="primary" />
-              <Chip label="Iyul" sx={{ mr: 1 }} size="small" color="primary" />
-              <Chip
-                label="Avgust"
-                sx={{ mr: 1 }}
-                size="small"
-                color="primary"
-              />
-              <Chip
-                label={"Sentyabr +"}
-                sx={{ mr: 1 }}
-                size="small"
-                color="primary"
-              />
-              <Chip
-                label="Oktyabr"
-                sx={{ mr: 1 }}
-                size="small"
-                color="primary"
-              />
-              <Chip
-                label="Noyabr"
-                sx={{ mr: 1 }}
-                size="small"
-                color="primary"
-              />
-              <Chip
-                label="Dekabr"
-                sx={{ mr: 1 }}
-                size="small"
-                color="primary"
-              />
+              <Button variant="contained" color="secondary">
+                saqlash
+              </Button>
             </div>
-          </li>
-          <li style={{ marginBottom: 5 }}>
-            <div style={{ display: "flex" }}>
-              <div style={{ width: "130px", overflow: "hidden" }}>
-                <Chip
-                  label="IT masters"
-                  sx={{ mr: 1 }}
-                  size="small"
-                  color="secondary"
-                />
-              </div>
 
-              <Chip
-                label="Yanvar"
-                sx={{ mr: 1 }}
+            <div
+              style={{
+                marginTop: "30px",
+                display: "flex",
+                gap: "10px",
+              }}
+            >
+              <TextField
+                id="standard-basic"
+                label="IT masters"
+                variant="filled"
+                color="dark"
                 size="small"
-                color="primary"
               />
-              <Chip
-                label="Fevral"
-                sx={{ mr: 1 }}
-                size="small"
-                color="primary"
-              />
-              <Chip label="Mart" sx={{ mr: 1 }} size="small" color="primary" />
-              <Chip label="Aprel" sx={{ mr: 1 }} size="small" color="primary" />
-              <Chip label="May" sx={{ mr: 1 }} size="small" color="primary" />
-              <Chip label="Iyun" sx={{ mr: 1 }} size="small" color="primary" />
-              <Chip label="Iyul" sx={{ mr: 1 }} size="small" color="primary" />
-              <Chip
-                label="Avgust"
-                sx={{ mr: 1 }}
-                size="small"
-                color="primary"
-              />
-              <Chip
-                label={"Sentyabr +"}
-                sx={{ mr: 1 }}
-                size="small"
-                color="primary"
-              />
-              <Chip
-                label="Oktyabr"
-                sx={{ mr: 1 }}
-                size="small"
-                color="primary"
-              />
-              <Chip
-                label="Noyabr"
-                sx={{ mr: 1 }}
-                size="small"
-                color="primary"
-              />
-              <Chip
-                label="Dekabr"
-                sx={{ mr: 1 }}
-                size="small"
-                color="primary"
-              />
+              <Button variant="contained" color="secondary">
+                saqlash
+              </Button>
             </div>
-          </li>
-        </ul>
-
-        <div
-          style={{
-            marginTop: "30px",
-            display: "flex",
-            gap: "10px",
-          }}
-        >
-          <TextField
-            id="standard-basic"
-            label="IT masters"
-            variant="filled"
-            color="dark"
-            size="small"
-          />
-          <Button variant="contained" color="secondary">
-            saqlash
-          </Button>
-        </div>
-
-        <div
-          style={{
-            marginTop: "30px",
-            display: "flex",
-            gap: "15px",
-          }}
-        >
-          <TextField
-            id="standard-basic"
-            label="IT masters"
-            variant="filled"
-            color="dark"
-            size="small"
-          />
-          <Button variant="contained" color="secondary">
-            saqlash
-          </Button>
-        </div>
+          </Grid>
+          <Grid
+            item
+            alignItems={"center"}
+            justifyContent={"center"}
+            display={"flex"}
+            sx={{ mt: 4 }}
+            xs={12}
+            sm={12}
+            md={4}
+            lg={4}
+          >
+            <Paper elevation={3} sx={{ backgroundColor: "white", padding: 3 }}>
+              <img src={barcode} alt="barkod" />
+            </Paper>
+          </Grid>
+        </Grid>
       </Paper>
     </Layout>
   );

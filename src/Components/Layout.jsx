@@ -5,11 +5,11 @@ import { Grid } from "@mui/material";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, url }) => {
   return (
     <Grid container>
       <Grid item sm={12} xs={12} md={2}>
-        <Sidebar />
+        <Sidebar url={url} />
       </Grid>
       <Grid item sm={12} xs={12} md={10}>
         <Header />

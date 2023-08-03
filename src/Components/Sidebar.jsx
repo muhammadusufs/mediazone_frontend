@@ -18,9 +18,16 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import AddCardOutlinedIcon from "@mui/icons-material/AddCardOutlined";
+import WorkHistoryOutlinedIcon from "@mui/icons-material/WorkHistoryOutlined";
 
-const Sidebar = () => {
+import { useState } from "react";
+import { AddCard } from "@mui/icons-material";
+
+const Sidebar = ({ url }) => {
+  console.log(url);
   const handleLogOut = (event) => {
     console.log("Logged out");
   };
@@ -40,55 +47,79 @@ const Sidebar = () => {
           </div>
 
           <div className="menu-list">
-            <div className="menu-list-item">
-              <Link to="/">
+            <div
+              className={
+                url === "home"
+                  ? "menu-list-item active-list-item"
+                  : "menu-list-item"
+              }
+            >
+              <Link to="/casher/">
                 <AddHomeOutlinedIcon />
                 <span>Bosh sahifa</span>
               </Link>
             </div>
 
-            <div className="menu-list-item">
-              <Link to="/debts">
-                <ArrowDropDownCircleOutlinedIcon />
-                <span>Kirimlar</span>
+            <div
+              className={
+                url === "informations"
+                  ? "menu-list-item active-list-item"
+                  : "menu-list-item"
+              }
+            >
+              <Link to="/casher/informations/">
+                <FeedOutlinedIcon />
+                <span>Ma'lumotlar</span>
               </Link>
             </div>
 
-            <div className="menu-list-item">
-              <Link to="/credits">
-                <MovingIcon />
-                <span>Chiqimlar</span>
+            <div
+              className={
+                url === "teachers"
+                  ? "menu-list-item active-list-item"
+                  : "menu-list-item"
+              }
+            >
+              <Link to="/casher/teachers/">
+                <AccountCircleOutlinedIcon />
+                <span>O'qituvchilar</span>
               </Link>
             </div>
 
-            <div className="menu-list-item">
-              <Link to="/sales">
-                <WorkOutlineIcon />
-                <span>Savdo</span>
+            <div
+              className={
+                url === "expenses"
+                  ? "menu-list-item active-list-item"
+                  : "menu-list-item"
+              }
+            >
+              <Link to="/casher/expenses/">
+                <AddCard />
+                <span>Harajatlar</span>
               </Link>
             </div>
 
-            <div className="menu-list-item">
-              <Link to="/loans">
-                <CreditCardIcon />
-                <span>Qarzlar</span>
-              </Link>
-            </div>
-            <div className="menu-list-item">
-              <Link to="/clients">
-                <SupervisedUserCircleIcon />
-                <span>Mijozlar</span>
-              </Link>
-            </div>
-            <div className="menu-list-item">
-              <Link to="/workers">
-                <EngineeringIcon />
-                <span>Ishchilar</span>
+            <div
+              className={
+                url === "sale"
+                  ? "menu-list-item active-list-item"
+                  : "menu-list-item"
+              }
+            >
+              <Link to="/casher/sale/">
+                <WorkHistoryOutlinedIcon />
+                <span>Tarix</span>
               </Link>
             </div>
 
-            <div className="menu-list-item">
-              <Link to="/settings">
+            <div
+              className={
+                url === "settings"
+                  ? "menu-list-item active-list-item"
+                  : "menu-list-item"
+              }
+            >
+              <Link to="/casher/settings/">
                 <SettingsOutlinedIcon />
                 <span>Sozlamalar</span>
               </Link>

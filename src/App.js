@@ -17,6 +17,11 @@ import { getUser, loginSuccess } from "./states/AuthSlices";
 // Services
 import AuthService from "./services/AuthService";
 import jwt_decode from "jwt-decode";
+import Informations from "./Screens/Informations";
+import Teachers from "./Screens/Teachers";
+import Expenses from "./Screens/Expenses";
+import History from "./Screens/History";
+import Settings from "./Screens/Settings";
 
 const theme = createTheme({
   palette: {
@@ -67,6 +72,11 @@ function App() {
       <Routes>
         <Route element={<PrivateRoutes account="casher" />}>
           <Route path="casher/" element={<Home />} />
+          <Route path="casher/informations/" element={<Informations />} />
+          <Route path="casher/teachers/" element={<Teachers />} />
+          <Route path="casher/expenses/" element={<Expenses />} />
+          <Route path="casher/sale/" element={<History />} />
+          <Route path="casher/settings/" element={<Settings />} />
         </Route>
         <Route element={<Login />} path="/login"></Route>
       </Routes>
