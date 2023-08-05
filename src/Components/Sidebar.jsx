@@ -27,7 +27,6 @@ import { useState } from "react";
 import { AddCard } from "@mui/icons-material";
 
 const Sidebar = ({ url }) => {
-  console.log(url);
   const handleLogOut = (event) => {
     console.log("Logged out");
   };

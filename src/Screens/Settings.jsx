@@ -54,11 +54,81 @@ const Settings = () => {
       </div>
 
       <Paper elevation={3} sx={{ p: 3, mt: 5 }}>
-        <Grid container>
+        <Divider>
+          <h3
+            style={{
+              color: "#3d3d3d",
+              marginTop: "5px",
+              marginBottom: "20px",
+            }}
+          >
+            Foydalanuvchi ma'lumotlari
+          </h3>
+        </Divider>
+        <Grid container spacing={3}>
           <Grid item xs={12} sm={12} md={6}>
-            <TextField label="Ism, Familiya" helperText={"Ism, Familiya"} />
+            <TextField
+              label="Ism, Familiya"
+              fullWidth
+              helperText={"Foydalanuvchi ismi, familiyasi"}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={6}>
+            <TextField
+              fullWidth
+              label="Login"
+              helperText={"Foydalanuvchi logini"}
+            />
           </Grid>
         </Grid>
+        <Button variant="contained" sx={{ my: 1 }}>
+          Saqlash
+        </Button>
+      </Paper>
+
+      <Paper elevation={3} sx={{ p: 3, mt: 5 }}>
+        <Divider>
+          <h3
+            style={{
+              color: "#3d3d3d",
+              marginTop: "5px",
+              marginBottom: "20px",
+            }}
+          >
+            Parolni o'zgartirish
+          </h3>
+        </Divider>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={12} md={4}>
+            <TextField
+              label="Hozirgi parol"
+              fullWidth
+              helperText={"Hozirgi parolni kiriting"}
+              type="password"
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={4}>
+            <TextField
+              type="password"
+              fullWidth
+              label="Hozirgi parolni takrorlang"
+              helperText={"Hozirgi parolni takror kiriting"}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={4}>
+            <TextField
+              fullWidth
+              label="Yangi parol"
+              helperText={"Yangi parolni kiriting"}
+            />
+          </Grid>
+        </Grid>
+        <Button variant="contained" sx={{ my: 1 }}>
+          O'zgartirish
+        </Button>
       </Paper>
     </Layout>
   );

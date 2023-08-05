@@ -1,7 +1,7 @@
 import { ThemeProvider, createTheme } from "@mui/material";
 import Home from "./Screens/Home";
 import Login from "./Screens/Login";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import PrivateRoutes from "./utils/PrivateRoutes";
 
 // Hooks
@@ -22,6 +22,7 @@ import Teachers from "./Screens/Teachers";
 import Expenses from "./Screens/Expenses";
 import History from "./Screens/History";
 import Settings from "./Screens/Settings";
+import Payment from "./Screens/Payment";
 
 const theme = createTheme({
   palette: {
@@ -36,6 +37,14 @@ const theme = createTheme({
       light: "#f1f1f1",
       dark: "#f5f5f5",
     },
+
+    light: {
+      main: "#f9f9f9",
+      light: "#fff",
+      dark: "#ebebeb",
+      contrastText: "#3d3d3d",
+    },
+
     dark: {
       main: "#3d3d3d",
     },
@@ -47,7 +56,7 @@ const theme = createTheme({
 
 function App() {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const setUser = async () => {
     try {
       const t = getItem("token");
@@ -56,7 +65,6 @@ function App() {
       dispatch(getUser(response.data));
     } catch (error) {
       removeItem("token");
-      console.log(error);
     }
   };
 
@@ -64,6 +72,8 @@ function App() {
     const token = getItem("token");
     if (token) {
       setUser();
+    } else {
+      navigate("/login");
     }
   }, []);
 
@@ -72,6 +82,11 @@ function App() {
       <Routes>
         <Route element={<PrivateRoutes account="casher" />}>
           <Route path="casher/" element={<Home />} />
+          <Route
+            path="casher/payment/:student_id/:month/:group_id/"
+            element={<Payment />}
+          />
+
           <Route path="casher/informations/" element={<Informations />} />
           <Route path="casher/teachers/" element={<Teachers />} />
           <Route path="casher/expenses/" element={<Expenses />} />
