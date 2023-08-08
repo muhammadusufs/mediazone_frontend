@@ -12,10 +12,7 @@ import {
   Snackbar,
   Alert,
   CircularProgress,
-  IconButton,
 } from "@mui/material";
-import CheckIcon from "@mui/icons-material/Check";
-import SearchOffIcon from "@mui/icons-material/SearchOff";
 import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
@@ -130,7 +127,7 @@ const Home = () => {
         await handleOldCheckStudent();
         let newInputs = [];
         inputs.map((input, index) => {
-          if (parseFloat(input.group_id) != parseFloat(group_id)) {
+          if (parseFloat(input.group_id) !== parseFloat(group_id)) {
             newInputs.push(input);
           }
         });
@@ -320,22 +317,32 @@ const Home = () => {
           </Paper>
 
           <div style={{ marginTop: "15px", marginBottom: "30px" }}>
-            <Button
-              startIcon={<ModeEditOutlineOutlinedIcon />}
-              variant="contained"
-              color="success"
+            <Link
+              style={{ textDecoration: "none" }}
+              to={`/general/students/${student.student_info.student.student_id}/edit/`}
             >
-              O'zgartirish
-            </Button>
+              <Button
+                startIcon={<ModeEditOutlineOutlinedIcon />}
+                variant="contained"
+                color="success"
+              >
+                O'zgartirish
+              </Button>
+            </Link>
 
-            <Button
-              sx={{ ml: 1 }}
-              startIcon={<DeleteOutlineOutlinedIcon />}
-              variant="contained"
-              color="error"
+            <Link
+              style={{ textDecoration: "none" }}
+              to={`/general/students/${student.student_info.student.student_id}/delete/`}
             >
-              O'chirish
-            </Button>
+              <Button
+                sx={{ ml: 1 }}
+                startIcon={<DeleteOutlineOutlinedIcon />}
+                variant="contained"
+                color="error"
+              >
+                O'chirish
+              </Button>
+            </Link>
 
             <Button
               sx={{ ml: 1 }}
@@ -349,7 +356,7 @@ const Home = () => {
         </>
       )}
 
-      <Snackbar open={open} autoHideDuration={3000} onClick={handleClose}>
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
           severity={alertType}

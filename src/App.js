@@ -23,6 +23,8 @@ import Expenses from "./Screens/Expenses";
 import History from "./Screens/History";
 import Settings from "./Screens/Settings";
 import Payment from "./Screens/Payment";
+import EditStudent from "./Screens/EditStudent";
+import DeleteStudent from "./Screens/DeleteStudent";
 
 const theme = createTheme({
   palette: {
@@ -87,7 +89,17 @@ function App() {
             element={<Payment />}
           />
 
-          <Route path="casher/informations/" element={<Informations />} />
+          <Route
+            path="general/students/:student_id/edit/"
+            element={<EditStudent />}
+          />
+
+          <Route
+            path="general/students/:student_id/delete/"
+            element={<DeleteStudent />}
+          />
+
+          <Route path="casher/data/" element={<Informations />} />
           <Route path="casher/teachers/" element={<Teachers />} />
           <Route path="casher/expenses/" element={<Expenses />} />
           <Route path="casher/sale/" element={<History />} />

@@ -27,6 +27,20 @@ const StudentService = {
     }
     return response;
   },
+
+  async update_student(student_id, name, phone, msg) {
+    const response = await axios.patch(`client/students/${student_id}/`, {
+      name,
+      phone,
+      sms_service: msg,
+    });
+    return response.status;
+  },
+
+  async delete_student(student_id) {
+    const response = await axios.delete(`client/students/${student_id}`);
+    return response.status;
+  },
 };
 
 export default StudentService;
