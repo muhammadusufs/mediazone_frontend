@@ -79,6 +79,7 @@ const EditStudent = () => {
           studentMessage
         );
         if (response === 200) {
+          getStudent(student_id);
           setAlertMessage("O'quvchi ma'lumotlari yangilandi");
           setAlertType("success");
           setOpen(true);
@@ -97,26 +98,27 @@ const EditStudent = () => {
     setSubmitBtn(false);
   };
 
+  const getStudent = async (student_id) => {
+    setProgress(15);
+    try {
+      setProgress(75);
+      const response = await StudentService.check_student(student_id);
+      dispatch(checkStudent(response.data));
+      setStudentName(response.data.student_info.student.name);
+      setStudentPhone(response.data.student_info.student.phone);
+      setStudentStatus(response.data.student_info.student.status);
+      setStudentMessage(response.data.student_info.student.sms_service);
+      handleMessage("success", `O'quvchi ma'lumotlari olindi`);
+      setProgress(100);
+    } catch (error) {
+      setProgress(80);
+      dispatch(studentFail(error.response.data));
+      setProgress(100);
+      handleMessage("error", `Xatolik, ${error.response.data}`);
+    }
+  };
+
   useEffect(() => {
-    const getStudent = async (student_id) => {
-      setProgress(15);
-      try {
-        setProgress(75);
-        const response = await StudentService.check_student(student_id);
-        dispatch(checkStudent(response.data));
-        setStudentName(response.data.student_info.student.name);
-        setStudentPhone(response.data.student_info.student.phone);
-        setStudentStatus(response.data.student_info.student.status);
-        setStudentMessage(response.data.student_info.student.sms_service);
-        handleMessage("success", `O'quvchi ma'lumotlari olindi`);
-        setProgress(100);
-      } catch (error) {
-        setProgress(80);
-        dispatch(studentFail(error.response.data));
-        setProgress(100);
-        handleMessage("error", `Xatolik, ${error.response.data}`);
-      }
-    };
     getStudent(student_id);
   }, [student_id, dispatch]);
 
@@ -132,7 +134,7 @@ const EditStudent = () => {
           <Link
             style={{ display: "flex", alignItems: "center" }}
             color="inherit"
-            to="/casher/informations/"
+            to="/casher/data/"
           >
             <FeedOutlinedIcon sx={{ mr: 0.5 }} fontSize="inherit" />
             Ma'lumotlar

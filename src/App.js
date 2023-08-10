@@ -25,6 +25,7 @@ import Settings from "./Screens/Settings";
 import Payment from "./Screens/Payment";
 import EditStudent from "./Screens/EditStudent";
 import DeleteStudent from "./Screens/DeleteStudent";
+import HistoryStudent from "./Screens/HistoryStudent";
 
 const theme = createTheme({
   palette: {
@@ -97,6 +98,11 @@ function App() {
           <Route
             path="general/students/:student_id/delete/"
             element={<DeleteStudent />}
+          />
+
+          <Route
+            path="general/students/:student_id/history/"
+            element={<HistoryStudent />}
           />
 
           <Route path="casher/data/" element={<Informations />} />

@@ -5,6 +5,7 @@ const initialState = {
   student: null,
   loading: true,
   errors: null,
+  history: null,
 };
 
 export const studentSlice = createSlice({
@@ -39,6 +40,10 @@ export const studentSlice = createSlice({
       state.student = null;
       state.errors = action.payload;
     },
+
+    historyStudent: (state, action) => {
+      state.history = action.payload;
+    },
   },
 });
 
@@ -48,5 +53,6 @@ export const {
   studentFail,
   checkStudent,
   checkStudentFail,
+  historyStudent,
 } = studentSlice.actions;
 export default studentSlice.reducer;

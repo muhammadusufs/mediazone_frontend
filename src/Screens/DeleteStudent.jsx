@@ -101,7 +101,7 @@ const DeleteStudent = () => {
           <Link
             style={{ display: "flex", alignItems: "center" }}
             color="inherit"
-            to="/casher/informations/"
+            to="/casher/data/"
           >
             <FeedOutlinedIcon sx={{ mr: 0.5 }} fontSize="inherit" />
             Ma'lumotlar

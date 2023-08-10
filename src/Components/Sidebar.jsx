@@ -66,7 +66,7 @@ const Sidebar = ({ url }) => {
                   : "menu-list-item"
               }
             >
-              <Link to="/casher/informations/">
+              <Link to="/casher/data/">
                 <FeedOutlinedIcon />
                 <span>Ma'lumotlar</span>
               </Link>

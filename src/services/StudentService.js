@@ -38,8 +38,17 @@ const StudentService = {
   },
 
   async delete_student(student_id) {
-    const response = await axios.delete(`client/students/${student_id}`);
+    const response = await axios.delete(
+      `client/actions/students/${student_id}`
+    );
     return response.status;
+  },
+
+  async student_history(student_id) {
+    const response = await axios.get(
+      `client/actions/students/${student_id}/subscription_history/`
+    );
+    return response;
   },
 };
 

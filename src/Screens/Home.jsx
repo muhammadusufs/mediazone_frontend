@@ -344,14 +344,19 @@ const Home = () => {
               </Button>
             </Link>
 
-            <Button
-              sx={{ ml: 1 }}
-              startIcon={<PersonSearchOutlinedIcon />}
-              variant="contained"
-              color="warning"
+            <Link
+              style={{ textDecoration: "none" }}
+              to={`/general/students/${student.student_info.student.student_id}/history/`}
             >
-              To'lovlar tarixi
-            </Button>
+              <Button
+                sx={{ ml: 1 }}
+                startIcon={<PersonSearchOutlinedIcon />}
+                variant="contained"
+                color="warning"
+              >
+                To'lovlar tarixi
+              </Button>
+            </Link>
           </div>
         </>
       )}
