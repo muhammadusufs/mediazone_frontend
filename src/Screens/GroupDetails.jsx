@@ -1,12 +1,7 @@
-// Library imports
-import moment from "moment";
-import "moment/locale/uz-latn";
-
 // Components
 import { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
 import {
-  Grid,
   Paper,
   Typography,
   Breadcrumbs,
@@ -21,33 +16,28 @@ import {
   Snackbar,
   Alert,
   Skeleton,
+  Chip,
 } from "@mui/material";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
 import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
-import { Link } from "react-router-dom";
-import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+import { Link, useParams } from "react-router-dom";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import GroupService from "../services/GroupService";
 import { useDispatch, useSelector } from "react-redux";
-import { groupStart, groupSuccess } from "../states/GroupSlice";
-import TeacherService from "../services/TeacherService";
-import { teacherSuccess } from "../states/TeacherSlice";
+import { checkGroup, groupStart } from "../states/GroupSlice";
 
-const Informations = () => {
-  function getDate() {
-    const today = new Date();
-    return today;
-  }
-
+const GroupDetails = () => {
+  const { group_id } = useParams();
   const dispatch = useDispatch();
-  const { loading, stats } = useSelector((state) => state.groups);
 
-  const [currentDate, setCurrentDate] = useState(getDate());
+  const { loading, group } = useSelector((state) => state.groups);
+
   const [progress, setProgress] = useState(0);
   const [open, setOpen] = useState(false);
   const [alertType, setAlertType] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
+  const [status, setStatus] = useState(null);
 
   const handleClose = () => {
     setOpen(false);
@@ -59,28 +49,25 @@ const Informations = () => {
     setOpen(true);
   };
 
-  const getStats = async () => {
+  const getGroup = async () => {
     setProgress(25);
     dispatch(groupStart());
     try {
       setProgress(35);
-      const response = await GroupService.get_groups_data();
-      const t = await TeacherService.get_teachers();
-      dispatch(teacherSuccess(t.data));
-      dispatch(groupSuccess(response.data));
+      const response = await GroupService.check_group(group_id);
+      dispatch(checkGroup(response.data));
+      setStatus(JSON.parse(response.data.status));
       setProgress(80);
     } catch (error) {
       setProgress(35);
-      handleMessage("Xatolik, qaytadan urining");
+      handleMessage("error", "Xatolik, qaytadan urining");
       setProgress(80);
     }
-
     setProgress(100);
   };
 
   useEffect(() => {
-    getStats();
-    setCurrentDate(getDate());
+    getGroup();
   }, []);
 
   return (
@@ -98,74 +85,49 @@ const Informations = () => {
             underline="hover"
             sx={{ display: "flex", alignItems: "center" }}
             color="inherit"
-            href="/"
+            to="/casher/"
           >
             <AddHomeOutlinedIcon sx={{ mr: 0.5 }} fontSize="inherit" />
             Bosh sahifa
+          </Link>
+
+          <Link
+            underline="hover"
+            sx={{ display: "flex", alignItems: "center" }}
+            color="inherit"
+            to="/casher/data/"
+          >
+            <FeedOutlinedIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+            Guruhlar
           </Link>
 
           <Typography
             sx={{ display: "flex", alignItems: "center" }}
             color="text.primary"
           >
-            <FeedOutlinedIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-            Ma'lumotlar
+            {group && group.name}
           </Typography>
         </Breadcrumbs>
 
         <div>
           <TextField sx={{ mr: 1 }} label="Qidirish" size="small" />
-          <Link style={{ textDecoration: "none" }} to={"create-group/"}>
+          <Link
+            style={{ textDecoration: "none" }}
+            to={"/casher/data/create-group/"}
+          >
             <Button variant="contained">Guruh ochish</Button>
           </Link>
         </div>
       </div>
-
-      <Grid container spacing={5}>
-        <Grid item sm={12} xs={12} md={4} lg={4}>
-          <Paper elevation={3} sx={{ padding: 5 }}>
-            <Typography color={"dark.main"} variant="h6">
-              <b>Sana</b>
-            </Typography>
-            <Typography variant="h4" color={"dark.main"}>
-              {moment(currentDate).format("LL")}
-              -yil
-            </Typography>
-          </Paper>
-        </Grid>
-
-        <Grid item sm={12} xs={12} md={4} lg={4}>
-          <Paper elevation={3} sx={{ padding: 5 }}>
-            <Typography color={"dark.main"} variant="h6">
-              <b>To'lov qilmagan o'quvchilar</b>
-            </Typography>
-            <Typography variant="h4" color={"dark.main"}>
-              {parseFloat(stats ? stats.unpayment : 0).toLocaleString()}
-            </Typography>
-          </Paper>
-        </Grid>
-
-        <Grid item sm={12} xs={12} md={4} lg={4}>
-          <Paper elevation={3} sx={{ padding: 5 }}>
-            <Typography color={"dark.main"} variant="h6">
-              <b>Guruhlar</b>
-            </Typography>
-            <Typography variant="h4" color={"dark.main"}>
-              {parseFloat(stats ? stats.groups_count : 0).toLocaleString()}
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
 
       <Paper elevation={3} sx={{ p: 3, mt: 5 }}>
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell colSpan={2}>Guruh</TableCell>
-                <TableCell>O'qituvchi</TableCell>
-                <TableCell align="right">O'quvchilar</TableCell>
-                <TableCell align="left">To'lov qilinmagan</TableCell>
+                <TableCell colSpan={2}>O'quvchi</TableCell>
+                <TableCell>Telefon</TableCell>
+                <TableCell align="right">Holat</TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
@@ -246,36 +208,26 @@ const Informations = () => {
                 </>
               ) : (
                 <>
-                  {stats &&
-                    stats.groups.map((group, index) => (
+                  {group &&
+                    group.students.map((student, index) => (
                       <TableRow key={index}>
                         <TableCell>{index + 1}</TableCell>
-                        <TableCell>{group.name}</TableCell>
-                        <TableCell>{group.teacher_name}</TableCell>
-                        <TableCell align="right">
-                          {group.students_count}
+                        <TableCell>
+                          {student.name} - {student.student_id}
                         </TableCell>
-                        <TableCell align="left">
-                          {group.unpayments_count}
-                        </TableCell>
+                        <TableCell>{student.phone}</TableCell>
                         <TableCell align="right">
-                          <Link
-                            style={{ textDecoration: "none" }}
-                            to={`view-group/${group.id}`}
-                          >
-                            <Button
-                              startIcon={<RemoveRedEyeOutlinedIcon />}
-                              variant={"contained"}
-                              size="small"
-                              sx={{ mr: 1 }}
-                            >
-                              Ko'rish
-                            </Button>
-                          </Link>
+                          {status && status[`${student.id}`] === true ? (
+                            <Chip label="To'langan" color="success" />
+                          ) : (
+                            <Chip label="To'lanmagan" color="error" />
+                          )}
+                        </TableCell>
 
+                        <TableCell align="right">
                           <Link
                             style={{ textDecoration: "none" }}
-                            to={`edit-group/${group.id}`}
+                            to={`/general/students/${student.student_id}/edit/`}
                           >
                             <Button
                               startIcon={<EditOutlinedIcon />}
@@ -287,15 +239,19 @@ const Informations = () => {
                               O'zgartish
                             </Button>
                           </Link>
-
-                          <Button
-                            startIcon={<DeleteOutlineOutlinedIcon />}
-                            variant={"contained"}
-                            size="small"
-                            color="error"
+                          <Link
+                            style={{ textDecoration: "none" }}
+                            to={`/general/students/${student.student_id}/delete/`}
                           >
-                            O'chirish
-                          </Button>
+                            <Button
+                              startIcon={<DeleteOutlineOutlinedIcon />}
+                              variant={"contained"}
+                              size="small"
+                              color="error"
+                            >
+                              O'chirish
+                            </Button>
+                          </Link>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -304,15 +260,6 @@ const Informations = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        {/* <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={10}
-          rowsPerPage={10}
-          page={1}
-          onPageChange={}
-          onRowsPerPageChange={}
-        /> */}
       </Paper>
 
       <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
@@ -328,4 +275,4 @@ const Informations = () => {
   );
 };
 
-export default Informations;
+export default GroupDetails;

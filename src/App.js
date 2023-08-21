@@ -6,7 +6,7 @@ import PrivateRoutes from "./utils/PrivateRoutes";
 
 // Hooks
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 // Local
 import { getItem, removeItem } from "./utils/storage";
@@ -26,6 +26,9 @@ import Payment from "./Screens/Payment";
 import EditStudent from "./Screens/EditStudent";
 import DeleteStudent from "./Screens/DeleteStudent";
 import HistoryStudent from "./Screens/HistoryStudent";
+import InsertGroup from "./Screens/InsertGroup";
+import GroupDetails from "./Screens/GroupDetails";
+import EditGroup from "./Screens/EditGroup";
 
 const theme = createTheme({
   palette: {
@@ -106,6 +109,17 @@ function App() {
           />
 
           <Route path="casher/data/" element={<Informations />} />
+          <Route path="casher/data/create-group/" element={<InsertGroup />} />
+          <Route
+            path="casher/data/view-group/:group_id/"
+            element={<GroupDetails />}
+          />
+
+          <Route
+            path="casher/data/edit-group/:group_id/"
+            element={<EditGroup />}
+          />
+
           <Route path="casher/teachers/" element={<Teachers />} />
           <Route path="casher/expenses/" element={<Expenses />} />
           <Route path="casher/sale/" element={<History />} />

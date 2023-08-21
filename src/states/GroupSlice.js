@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  groups: [],
+  stats: [],
   group: null,
   loading: true,
   errors: null,
@@ -13,16 +13,18 @@ export const groupSlice = createSlice({
   reducers: {
     groupStart: (state, action) => {
       state.loading = true;
+      state.errors = null;
+      state.stats = null;
     },
 
     groupSuccess: (state, action) => {
       state.loading = false;
-      state.groups = action.payload;
+      state.stats = action.payload;
       state.errors = null;
     },
 
     groupFail: (state, action) => {
-      state.groups = null;
+      state.stats = null;
       state.errors = action.payload;
       state.loading = false;
     },

@@ -8,9 +8,9 @@ import Header from "./Header";
 const Layout = ({ children, url, progress = 0 }) => {
   return (
     <>
-      {progress > 0 && progress !== 100 && (
-        <LinearProgress variant="determinate" value={progress} />
-      )}
+      {/* {progress > 0 && progress !== 100 && ( */}
+      <LinearProgress variant="determinate" value={progress} />
+      {/* )} */}
       <Grid container>
         <Grid item sm={12} xs={12} md={2}>
           <Sidebar url={url} />
