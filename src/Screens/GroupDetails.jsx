@@ -110,7 +110,6 @@ const GroupDetails = () => {
         </Breadcrumbs>
 
         <div>
-          <TextField sx={{ mr: 1 }} label="Qidirish" size="small" />
           <Link
             style={{ textDecoration: "none" }}
             to={"/casher/data/create-group/"}

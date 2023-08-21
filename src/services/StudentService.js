@@ -50,6 +50,11 @@ const StudentService = {
     );
     return response;
   },
+
+  async get_students() {
+    const response = await axios.get("client/students/");
+    return response;
+  },
 };
 
 export default StudentService;

@@ -71,11 +71,25 @@ const Informations = () => {
       setProgress(80);
     } catch (error) {
       setProgress(35);
-      handleMessage("Xatolik, qaytadan urining");
+      handleMessage("error", "Xatolik, qaytadan urining");
       setProgress(80);
     }
 
     setProgress(100);
+  };
+
+  const deleteGroup = async (group_id) => {
+    setProgress(25);
+    try {
+      const d = await GroupService.delete_group(group_id);
+      if (d === 204) {
+        setProgress(55);
+        await getStats();
+        handleMessage("success", "Guruh o'chirildi");
+      }
+    } catch (error) {
+      handleMessage("error", "Xatolik, qaytadan urining");
+    }
   };
 
   useEffect(() => {
@@ -114,7 +128,6 @@ const Informations = () => {
         </Breadcrumbs>
 
         <div>
-          <TextField sx={{ mr: 1 }} label="Qidirish" size="small" />
           <Link style={{ textDecoration: "none" }} to={"create-group/"}>
             <Button variant="contained">Guruh ochish</Button>
           </Link>
@@ -293,6 +306,7 @@ const Informations = () => {
                             variant={"contained"}
                             size="small"
                             color="error"
+                            onClick={() => deleteGroup(group.id)}
                           >
                             O'chirish
                           </Button>

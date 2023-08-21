@@ -14,6 +14,8 @@ import {
   Checkbox,
   Snackbar,
   Alert,
+  MenuItem,
+  Autocomplete,
 } from "@mui/material";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
@@ -21,14 +23,27 @@ import { Link, useParams } from "react-router-dom";
 import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import StudentService from "../services/StudentService";
-import { checkStudent, studentFail } from "../states/StudentSlice";
-import { checkGroup, checkGroupFail } from "../states/GroupSlice";
+import TeacherService from "../services/TeacherService";
+import {
+  checkStudent,
+  studentFail,
+  studentStart,
+  studentSuccess,
+} from "../states/StudentSlice";
+import {
+  checkGroup,
+  checkGroupFail,
+  groupSuccess,
+  setSubjects,
+} from "../states/GroupSlice";
 import GroupService from "../services/GroupService";
-import { teacherStart } from "../states/TeacherSlice";
+import { teacherStart, teacherSuccess } from "../states/TeacherSlice";
 
 const EditGroup = () => {
   const { group_id } = useParams();
-  const { group } = useSelector((state) => state.groups);
+  const { group, subjects } = useSelector((state) => state.groups);
+  const { teachers } = useSelector((state) => state.teachers);
+  const { students } = useSelector((state) => state.students);
   const dispatch = useDispatch();
 
   const [progress, setProgress] = useState(0);
@@ -60,63 +75,87 @@ const EditGroup = () => {
   };
 
   const handleSubmit = async (e) => {
-    //   e.preventDefault();
-    //   setProgress(10);
-    //   setSubmitBtn(true);
-    //   try {
-    //     if (student) {
-    //       setProgress(80);
-    //       const response = await StudentService.update_student(
-    //         student.student_info.student.id,
-    //         studentName,
-    //         studentPhone,
-    //         studentMessage
-    //       );
-    //       if (response === 200) {
-    //         getStudent(student_id);
-    //         setAlertMessage("O'quvchi ma'lumotlari yangilandi");
-    //         setAlertType("success");
-    //         setOpen(true);
-    //       }
-    //     } else {
-    //       throw "O'quvchi topilmadi.";
-    //     }
-    //   } catch (error) {
-    //     setProgress(80);
-    //     setAlertType("error");
-    //     setAlertMessage(error);
-    //     setOpen(true);
-    //   }
-    //   setProgress(100);
-    //   setSubmitBtn(false);
-    // };
+    e.preventDefault();
+    setProgress(10);
+    setSubmitBtn(true);
+    try {
+      const response = await GroupService.update_group(
+        group_id,
+        groupName,
+        groupCost,
+        groupTeacher,
+        groupSubject,
+        groupStudents
+      );
+
+      if (response === 200) {
+        getGroup(group_id);
+        setAlertMessage("Guruh ma'lumotlari yangilandi");
+        setAlertType("success");
+        setOpen(true);
+      } else {
+        throw "Guruh topilmadi.";
+      }
+    } catch (error) {
+      setProgress(80);
+      setAlertType("error");
+      setAlertMessage(error);
+      console.log(error);
+      setOpen(true);
+    }
+    setProgress(100);
+    setSubmitBtn(false);
   };
 
-   const getTeachers = async () => {
-     setProgress(25);
-     dispatch(teacherStart());
-     try {
-       setProgress(35);
-       const response = await GroupService.get_groups_data();
-       const t = await TeacherService.get_teachers();
-       dispatch(teacherSuccess(t.data));
-       dispatch(groupSuccess(response.data));
-       setProgress(80);
-     } catch (error) {
-       setProgress(35);
-       handleMessage("Xatolik, qaytadan urining");
-       setProgress(80);
-     }
+  const getTeachers = async () => {
+    setProgress(25);
+    dispatch(teacherStart());
+    try {
+      setProgress(35);
+      const t = await TeacherService.get_teachers();
+      dispatch(teacherSuccess(t.data));
+      setProgress(80);
+    } catch (error) {
+      setProgress(35);
+      handleMessage("error", "Xatolik, qaytadan urining");
+      setProgress(80);
+    }
 
-     setProgress(100);
-   };
+    setProgress(100);
+  };
+
+  const getStudents = async () => {
+    setProgress(25);
+    dispatch(studentStart());
+    try {
+      setProgress(35);
+      const t = await StudentService.get_students();
+      dispatch(studentSuccess(t.data));
+      setProgress(80);
+    } catch (error) {
+      setProgress(35);
+      handleMessage("error", "Xatolik, qaytadan urining");
+      setProgress(80);
+    }
+
+    setProgress(100);
+  };
+
+  const getSubjects = async () => {
+    try {
+      const s = await GroupService.get_subjects();
+      dispatch(setSubjects(s.data));
+    } catch (error) {
+      handleMessage("error", "Xatolik, qaytadan urining");
+    }
+  };
+
   const getGroup = async (group_id) => {
     setProgress(15);
     try {
       setProgress(75);
       const response = await GroupService.check_group(group_id);
       dispatch(checkGroup(response.data));
-      console.log(response.data);
       setGroupName(response.data.name);
       setGroupCost(response.data.cost);
       setGroupStudents(response.data.students);
@@ -134,6 +173,9 @@ const EditGroup = () => {
 
   useEffect(() => {
     getGroup(group_id);
+    getTeachers();
+    getSubjects();
+    getStudents();
   }, [group_id, dispatch]);
 
   return (
@@ -184,20 +226,12 @@ const EditGroup = () => {
           </h3>
         </Divider>
         <form onSubmit={(e) => handleSubmit(e)}>
-          <Grid container columnSpacing={3}>
+          <Grid container columnSpacing={3} rowSpacing={3}>
             <Grid item xs={12} sm={12} md={6}>
               <TextField
                 label="Guruh nomi"
                 fullWidth
                 value={groupName}
-                onInput={(e) => setGroupName(e.target.value)}
-                helperText={"Guruh nomi, misol uchun: Guruh 1"}
-              />
-
-              <TextField
-                label="Guruh nomi"
-                fullWidth
-                value={group}
                 onInput={(e) => setGroupName(e.target.value)}
                 helperText={"Guruh nomi, misol uchun: Guruh 1"}
               />
@@ -212,7 +246,78 @@ const EditGroup = () => {
                 helperText={"Guruh uchun belgilangan narx (so'm)"}
               />
             </Grid>
+
+            <Grid item xs={12} sm={12} md={6}>
+              <TextField
+                label="O'qituvchi"
+                helperText={"Guruh o'qituvchisi"}
+                required
+                fullWidth
+                value={groupTeacher}
+                defaultValue={groupTeacher}
+                onChange={(e) => setGroupTeacher(e.target.value)}
+                select
+              >
+                {teachers ? (
+                  teachers.map((teacher) => (
+                    <MenuItem key={teacher.id} value={teacher.id}>
+                      {teacher.name}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <div></div>
+                )}
+              </TextField>
+            </Grid>
+
+            <Grid item xs={12} sm={12} md={6}>
+              <TextField
+                label="Fan"
+                helperText={"Guruhda o'tiladigan fan"}
+                required
+                fullWidth
+                value={groupSubject}
+                defaultValue={groupSubject}
+                onChange={(e) => setGroupSubject(e.target.value)}
+                select
+              >
+                {subjects ? (
+                  subjects.map((subject) => (
+                    <MenuItem key={subject.id} value={subject.id}>
+                      {subject.name}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <div></div>
+                )}
+              </TextField>
+            </Grid>
+
+            <Grid item xs={12} sm={12} md={12}>
+              <Autocomplete
+                sx={{ mb: 2 }}
+                fullWidth
+                multiple
+                value={groupStudents}
+                onChange={(event, newValue) => {
+                  setGroupStudents(newValue);
+                }}
+                options={students ? students : []}
+                getOptionLabel={(student) => student.name}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                disableCloseOnSelect
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Guruh o'quvchilari"
+                    placeholder="O'quvchilar"
+                  />
+                )}
+              />
+            </Grid>
           </Grid>
+
           <Button
             disabled={submitBtn}
             type="submit"
@@ -221,6 +326,11 @@ const EditGroup = () => {
           >
             Saqlash
           </Button>
+          <a href={"/casher/data/"}>
+            <Button type="button" sx={{ my: 1 }}>
+              Ortga
+            </Button>
+          </a>
         </form>
       </Paper>
 

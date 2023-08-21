@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   stats: [],
   group: null,
+  subjects: null,
   loading: true,
   errors: null,
 };
@@ -29,6 +30,10 @@ export const groupSlice = createSlice({
       state.loading = false;
     },
 
+    setSubjects: (state, action) => {
+      state.subjects = action.payload;
+    },
+
     checkGroup: (state, action) => {
       state.group = action.payload;
       state.loading = false;
@@ -46,6 +51,7 @@ export const {
   groupStart,
   groupSuccess,
   groupFail,
+  setSubjects,
   checkGroup,
   checkGroupFail,
 } = groupSlice.actions;

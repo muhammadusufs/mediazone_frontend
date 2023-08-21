@@ -32,6 +32,29 @@ const GroupService = {
     });
     return response.status;
   },
+
+  async get_subjects() {
+    const response = await axios.get("client/subjects/");
+    return response;
+  },
+
+  async update_group(group_id, name, cost, teacher, subject, students) {
+    const response = await axios.patch(`client/groups/${group_id}/`, {
+      name,
+      cost,
+      teacher,
+      subject,
+      students,
+    });
+    return response.status;
+  },
+
+  async delete_group(group_id) {
+    const response = await axios.delete(
+      `client/actions/group/${group_id}/delete/`
+    );
+    return response.status;
+  },
 };
 
 export default GroupService;

@@ -1,5 +1,5 @@
 // Components
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
 import {
   Grid,
@@ -15,6 +15,9 @@ import {
   TableBody,
   Button,
   IconButton,
+  Alert,
+  Snackbar,
+  Skeleton,
 } from "@mui/material";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
@@ -23,13 +26,57 @@ import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import { useDispatch, useSelector } from "react-redux";
+import { teacherStart, teacherSuccess } from "../states/TeacherSlice";
+import TeacherService from "../services/TeacherService";
 const Teachers = () => {
   const [sid, setSid] = useState("");
+
+  const dispatch = useDispatch();
+  const { teachers, loading } = useSelector((state) => state.teachers);
+
+  const [progress, setProgress] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleMessage = (ttype, msg) => {
+    setAlertType(ttype);
+    setAlertMessage(msg);
+    setOpen(true);
+  };
+
+  const getTeachers = async () => {
+    setProgress(25);
+    dispatch(teacherStart());
+
+    try {
+      setProgress(35);
+      const response = await TeacherService.get_teachers();
+      dispatch(teacherSuccess(response.data));
+      setProgress(80);
+    } catch (error) {
+      setProgress(35);
+      handleMessage("error", "Xatolik, qaytadan urining");
+      setProgress(80);
+    }
+
+    setProgress(100);
+  };
+
   const handle = (value) => {
     setSid(value);
   };
+
+  useEffect(() => {
+    getTeachers();
+  }, []);
   return (
-    <Layout url="teachers">
+    <Layout url="teachers" progress={progress}>
       <div
         style={{
           display: "flex",
@@ -75,49 +122,170 @@ const Teachers = () => {
             <TableHead>
               <TableRow>
                 <TableCell colSpan={2}>O'qituvchi</TableCell>
+                <TableCell>Telefon</TableCell>
                 <TableCell align="right">Avanslar</TableCell>
                 <TableCell align="right">Jarimalar</TableCell>
                 <TableCell align="right">Bonuslar</TableCell>
+                <TableCell align="right">Davomat</TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>1</TableCell>
-                <TableCell>Python Rustev</TableCell>
-                <TableCell align="right">500 000 so'm </TableCell>
-                <TableCell align="right">500 000 so'm </TableCell>
-                <TableCell align="right">500 000 so'm </TableCell>
-                <TableCell align="right">
-                  <Button
-                    startIcon={<RemoveRedEyeOutlinedIcon />}
-                    variant={"contained"}
-                    size="small"
-                    sx={{ mr: 1 }}
-                  >
-                    Ko'rish
-                  </Button>
+              {loading ? (
+                <>
+                  <TableRow>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                  </TableRow>
 
-                  <Button
-                    startIcon={<EditOutlinedIcon />}
-                    variant={"contained"}
-                    size="small"
-                    color="success"
-                    sx={{ mr: 1 }}
-                  >
-                    O'zgartish
-                  </Button>
+                  <TableRow>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                  </TableRow>
 
-                  <Button
-                    startIcon={<DeleteOutlineOutlinedIcon />}
-                    variant={"contained"}
-                    size="small"
-                    color="error"
-                  >
-                    O'chirish
-                  </Button>
-                </TableCell>
-              </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                  </TableRow>
+                </>
+              ) : (
+                <>
+                  {teachers ? (
+                    teachers.map((teacher, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{teacher.name}</TableCell>
+                        <TableCell>{teacher.phone}</TableCell>
+
+                        <TableCell align="right">
+                          {parseFloat(teacher.debt).toLocaleString()} so'm{" "}
+                        </TableCell>
+                        <TableCell align="right">
+                          {parseFloat(teacher.fine).toLocaleString()} so'm{" "}
+                        </TableCell>
+                        <TableCell align="right">
+                          {parseFloat(teacher.bonus).toLocaleString()} so'm{" "}
+                        </TableCell>
+                        <TableCell align="right">
+                          {parseFloat(teacher.attendace).toLocaleString()} kun
+                        </TableCell>
+                        <TableCell align="right">
+                          <Button
+                            startIcon={<RemoveRedEyeOutlinedIcon />}
+                            variant={"contained"}
+                            size="small"
+                            sx={{ mr: 1 }}
+                          >
+                            Ko'rish
+                          </Button>
+
+                          <Button
+                            startIcon={<EditOutlinedIcon />}
+                            variant={"contained"}
+                            size="small"
+                            color="success"
+                            sx={{ mr: 1 }}
+                          >
+                            O'zgartish
+                          </Button>
+
+                          <Button
+                            startIcon={<DeleteOutlineOutlinedIcon />}
+                            variant={"contained"}
+                            size="small"
+                            color="error"
+                          >
+                            O'chirish
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <>Hozircha o'qituvchilar mavjud emas</>
+                  )}
+                </>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -131,6 +299,15 @@ const Teachers = () => {
           onRowsPerPageChange={}
         /> */}
       </Paper>
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity={alertType}
+          sx={{ width: "100%" }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </Layout>
   );
 };
