@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   teachers: [],
   teacher: null,
+  stats: null,
   loading: true,
   errors: null,
 };
@@ -39,6 +40,12 @@ export const teacherSlice = createSlice({
       state.teacher = null;
       state.errors = action.payload;
     },
+
+    setTeacherStats: (state, action) => {
+      state.loading = false;
+      state.stats = action.payload;
+      state.errors = null;
+    },
   },
 });
 
@@ -48,5 +55,6 @@ export const {
   teacherFail,
   checkTeacher,
   checkTeacherFail,
+  setTeacherStats,
 } = teacherSlice.actions;
 export default teacherSlice.reducer;

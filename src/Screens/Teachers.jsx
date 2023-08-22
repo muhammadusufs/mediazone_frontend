@@ -251,14 +251,19 @@ const Teachers = () => {
                           {parseFloat(teacher.attendace).toLocaleString()} kun
                         </TableCell>
                         <TableCell align="right">
-                          <Button
-                            startIcon={<RemoveRedEyeOutlinedIcon />}
-                            variant={"contained"}
-                            size="small"
-                            sx={{ mr: 1 }}
+                          <Link
+                            to={`${teacher.id}/`}
+                            style={{ textDecoration: "none" }}
                           >
-                            Ko'rish
-                          </Button>
+                            <Button
+                              startIcon={<RemoveRedEyeOutlinedIcon />}
+                              variant={"contained"}
+                              size="small"
+                              sx={{ mr: 1 }}
+                            >
+                              Ko'rish
+                            </Button>
+                          </Link>
 
                           <Button
                             startIcon={<EditOutlinedIcon />}

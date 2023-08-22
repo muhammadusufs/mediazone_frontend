@@ -29,6 +29,7 @@ import HistoryStudent from "./Screens/HistoryStudent";
 import InsertGroup from "./Screens/InsertGroup";
 import GroupDetails from "./Screens/GroupDetails";
 import EditGroup from "./Screens/EditGroup";
+import TeacherDetails from "./Screens/TeacherDetails";
 
 const theme = createTheme({
   palette: {
@@ -121,6 +122,11 @@ function App() {
           />
 
           <Route path="casher/teachers/" element={<Teachers />} />
+          <Route
+            path="casher/teachers/:teacher_id/"
+            element={<TeacherDetails />}
+          />
+
           <Route path="casher/expenses/" element={<Expenses />} />
           <Route path="casher/sale/" element={<History />} />
           <Route path="casher/settings/" element={<Settings />} />
