@@ -30,6 +30,10 @@ import InsertGroup from "./Screens/InsertGroup";
 import GroupDetails from "./Screens/GroupDetails";
 import EditGroup from "./Screens/EditGroup";
 import TeacherDetails from "./Screens/TeacherDetails";
+import TeacherAddBonus from "./Screens/TeacherAddBonus";
+import TeacherAddDebt from "./Screens/TeacherAddDebt";
+import TeacherAddFine from "./Screens/TeacherAddFine";
+import EditTeacher from "./Screens/EditTeacher";
 
 const theme = createTheme({
   palette: {
@@ -125,6 +129,26 @@ function App() {
           <Route
             path="casher/teachers/:teacher_id/"
             element={<TeacherDetails />}
+          />
+
+          <Route
+            path="casher/teachers/:teacher_id/add/bonus/"
+            element={<TeacherAddBonus />}
+          />
+
+          <Route
+            path="casher/teachers/:teacher_id/add/debt/"
+            element={<TeacherAddDebt />}
+          />
+
+          <Route
+            path="casher/teachers/:teacher_id/add/fine/"
+            element={<TeacherAddFine />}
+          />
+
+          <Route
+            path="casher/teachers/:teacher_id/edit/"
+            element={<EditTeacher />}
           />
 
           <Route path="casher/expenses/" element={<Expenses />} />

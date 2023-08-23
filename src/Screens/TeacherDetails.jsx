@@ -1,3 +1,7 @@
+// Library imports
+import moment from "moment";
+import "moment/locale/uz-latn";
+
 // Components
 import { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
@@ -22,6 +26,7 @@ import {
   Box,
   Tabs,
   Tab,
+  IconButton,
 } from "@mui/material";
 
 import TabContext from "@mui/lab/TabContext";
@@ -30,6 +35,7 @@ import TabPanel from "@mui/lab/TabPanel";
 
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
 import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
+import AddIcon from "@mui/icons-material/Add";
 import { Link, useParams } from "react-router-dom";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -49,12 +55,12 @@ const TeacherDetails = () => {
   const { teacher_id } = useParams();
   const dispatch = useDispatch();
 
-  const { loading, teacher } = useSelector((state) => state.teachers);
+  const { loading, teacher, stats } = useSelector((state) => state.teachers);
+
+  const [value, setValue] = useState("1");
 
   const [progress, setProgress] = useState(0);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("1");
-
   const [alertType, setAlertType] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
   const [status, setStatus] = useState(null);
@@ -189,6 +195,7 @@ const TeacherDetails = () => {
                     <b>Davomat</b>
                   </TableCell>
                   <TableCell>{teacher && teacher.attendace} kun</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
@@ -196,6 +203,13 @@ const TeacherDetails = () => {
                   </TableCell>
                   <TableCell>
                     {teacher && parseFloat(teacher.debt).toLocaleString()} so'm
+                  </TableCell>
+                  <TableCell>
+                    <Link to={`/casher/teachers/${teacher.id}/add/debt/`}>
+                      <IconButton sx={{ m: 0, p: 0 }} color="primary">
+                        <AddIcon />
+                      </IconButton>
+                    </Link>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -205,6 +219,13 @@ const TeacherDetails = () => {
                   <TableCell>
                     {teacher && parseFloat(teacher.fine).toLocaleString()} so'm
                   </TableCell>
+                  <TableCell>
+                    <Link to={`/casher/teachers/${teacher.id}/add/fine/`}>
+                      <IconButton sx={{ m: 0, p: 0 }} color="primary">
+                        <AddIcon />
+                      </IconButton>
+                    </Link>
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
@@ -212,6 +233,13 @@ const TeacherDetails = () => {
                   </TableCell>
                   <TableCell>
                     {teacher && parseFloat(teacher.bonus).toLocaleString()} so'm
+                  </TableCell>
+                  <TableCell>
+                    <Link to={`/casher/teachers/${teacher.id}/add/bonus/`}>
+                      <IconButton sx={{ m: 0, p: 0 }} color="primary">
+                        <AddIcon />
+                      </IconButton>
+                    </Link>
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -245,10 +273,165 @@ const TeacherDetails = () => {
                   <Tab label="Bonuslar" value="4" />
                 </TabList>
               </Box>
-              <TabPanel value="1">1</TabPanel>
-              <TabPanel value="2">2</TabPanel>
-              <TabPanel value="3">3</TabPanel>
-              <TabPanel value="4">4</TabPanel>
+              <TabPanel value="1">
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>#</TableCell>
+                      <TableCell>Sana</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {loading ? (
+                      <TableRow>
+                        <TableCell>
+                          <Skeleton variant="rounded" animation="wave" />
+                        </TableCell>
+                        <TableCell align="right">
+                          <Skeleton variant="rounded" animation="wave" />
+                        </TableCell>
+                      </TableRow>
+                    ) : stats && stats.attendace.length > 0 ? (
+                      stats.attendace.map((row, index) => (
+                        <TableRow>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>
+                            {moment(row.date).format("LLLL")}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableCell colSpan={2}>
+                        <>Mavjud emas</>
+                      </TableCell>
+                    )}
+                  </TableBody>
+                </Table>
+              </TabPanel>
+
+              <TabPanel value="2">
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>#</TableCell>
+                      <TableCell>Izoh</TableCell>
+                      <TableCell>Miqdori</TableCell>
+                      <TableCell>Sana</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {loading ? (
+                      <TableRow>
+                        <TableCell>
+                          <Skeleton variant="rounded" animation="wave" />
+                        </TableCell>
+                        <TableCell align="right">
+                          <Skeleton variant="rounded" animation="wave" />
+                        </TableCell>
+                      </TableRow>
+                    ) : stats && stats.debts.length > 0 ? (
+                      stats.debts.map((row, index) => (
+                        <TableRow>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{row.comment}</TableCell>
+                          <TableCell>
+                            {parseFloat(row.amount).toLocaleString()} so'm
+                          </TableCell>
+                          <TableCell>
+                            {moment(row.date).format("LLLL")}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableCell colSpan={4}>
+                        <>Mavjud emas</>
+                      </TableCell>
+                    )}
+                  </TableBody>
+                </Table>
+              </TabPanel>
+              <TabPanel value="3">
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>#</TableCell>
+                      <TableCell>Izoh</TableCell>
+                      <TableCell>Miqdori</TableCell>
+                      <TableCell>Sana</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {loading ? (
+                      <TableRow>
+                        <TableCell>
+                          <Skeleton variant="rounded" animation="wave" />
+                        </TableCell>
+                        <TableCell align="right">
+                          <Skeleton variant="rounded" animation="wave" />
+                        </TableCell>
+                      </TableRow>
+                    ) : stats && stats.fines.length > 0 ? (
+                      stats.fines.map((row, index) => (
+                        <TableRow>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{row.comment}</TableCell>
+                          <TableCell>
+                            {parseFloat(row.amount).toLocaleString()} so'm
+                          </TableCell>
+                          <TableCell>
+                            {moment(row.date).format("LLLL")}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableCell colSpan={4}>
+                        <>Mavjud emas</>
+                      </TableCell>
+                    )}
+                  </TableBody>
+                </Table>
+              </TabPanel>
+              <TabPanel value="4">
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>#</TableCell>
+                      <TableCell>Izoh</TableCell>
+                      <TableCell>Miqdori</TableCell>
+                      <TableCell>Sana</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {loading ? (
+                      <TableRow>
+                        <TableCell>
+                          <Skeleton variant="rounded" animation="wave" />
+                        </TableCell>
+                        <TableCell align="right">
+                          <Skeleton variant="rounded" animation="wave" />
+                        </TableCell>
+                      </TableRow>
+                    ) : stats && stats.bonuses.length > 0 ? (
+                      stats.bonuses.map((row, index) => (
+                        <TableRow>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{row.comment}</TableCell>
+                          <TableCell>
+                            {parseFloat(row.amount).toLocaleString()} so'm
+                          </TableCell>
+                          <TableCell>
+                            {moment(row.date).format("LLLL")}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableCell colSpan={4}>
+                        <>Mavjud emas</>
+                      </TableCell>
+                    )}
+                  </TableBody>
+                </Table>
+              </TabPanel>
             </TabContext>
           </Box>
         </Box>

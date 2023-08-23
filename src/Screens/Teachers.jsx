@@ -72,6 +72,17 @@ const Teachers = () => {
     setSid(value);
   };
 
+  const handleDelete = async (teacher_id) => {
+    setProgress(25);
+    try {
+      const response = TeacherService.delete_teacher(teacher_id);
+      handleMessage("success", "O'qituvchi o'chirildi");
+      await getTeachers();
+    } catch (error) {
+      handleMessage("error", "Xatolik, qaytadan urining");
+    }
+  };
+
   useEffect(() => {
     getTeachers();
   }, []);
@@ -265,20 +276,26 @@ const Teachers = () => {
                             </Button>
                           </Link>
 
-                          <Button
-                            startIcon={<EditOutlinedIcon />}
-                            variant={"contained"}
-                            size="small"
-                            color="success"
-                            sx={{ mr: 1 }}
+                          <Link
+                            to={`${teacher.id}/edit/`}
+                            style={{ textDecoration: "none" }}
                           >
-                            O'zgartish
-                          </Button>
+                            <Button
+                              startIcon={<EditOutlinedIcon />}
+                              variant={"contained"}
+                              size="small"
+                              color="success"
+                              sx={{ mr: 1 }}
+                            >
+                              O'zgartish
+                            </Button>
+                          </Link>
 
                           <Button
                             startIcon={<DeleteOutlineOutlinedIcon />}
                             variant={"contained"}
                             size="small"
+                            onClick={() => handleDelete(teacher.id)}
                             color="error"
                           >
                             O'chirish

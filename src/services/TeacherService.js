@@ -14,6 +14,47 @@ const TeacherService = {
     const response = await axios.get(`client/teachers/${teacher_id}/stats/`);
     return response;
   },
+  async add_bonus(teacher_id, amount, comment) {
+    const response = await axios.post(`client/teacher/bonus/`, {
+      teacher: teacher_id,
+      comment,
+      amount,
+    });
+    return response.status;
+  },
+
+  async add_debt(teacher_id, amount, comment) {
+    const response = await axios.post(`client/teacher/debt/`, {
+      teacher: teacher_id,
+      comment,
+      amount,
+    });
+    return response.status;
+  },
+
+  async add_fine(teacher_id, amount, comment) {
+    const response = await axios.post(`client/teacher/fine/`, {
+      teacher: teacher_id,
+      comment,
+      amount,
+    });
+    return response.status;
+  },
+
+  async update_teacher(teacher_id, name, phone) {
+    const response = await axios.patch(`client/teachers/${teacher_id}/`, {
+      name,
+      phone,
+    });
+    return response.status;
+  },
+
+  async delete_teacher(teacher_id) {
+    const response = await axios.delete(
+      `client/actions/teachers/${teacher_id}/delete/`
+    );
+    return response.status;
+  },
 };
 
 export default TeacherService;
