@@ -41,6 +41,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import GroupService from "../services/GroupService";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 
 import { useDispatch, useSelector } from "react-redux";
 import { checkGroup, groupStart } from "../states/GroupSlice";
@@ -145,11 +146,13 @@ const TeacherDetails = () => {
         </Breadcrumbs>
 
         <div>
-          <Link
-            style={{ textDecoration: "none" }}
-            to={"/casher/data/create-group/"}
-          >
-            <Button variant="contained">Guruh ochish</Button>
+          <Link to={"create-teacher/"} style={{ textDecoration: "none" }}>
+            <Button
+              variant="contained"
+              startIcon={<AddCircleOutlineOutlinedIcon />}
+            >
+              Yangi o'qituvchi
+            </Button>
           </Link>
         </div>
       </div>
@@ -205,7 +208,9 @@ const TeacherDetails = () => {
                     {teacher && parseFloat(teacher.debt).toLocaleString()} so'm
                   </TableCell>
                   <TableCell>
-                    <Link to={`/casher/teachers/${teacher.id}/add/debt/`}>
+                    <Link
+                      to={`/casher/teachers/${teacher && teacher.id}/add/debt/`}
+                    >
                       <IconButton sx={{ m: 0, p: 0 }} color="primary">
                         <AddIcon />
                       </IconButton>
@@ -217,10 +222,14 @@ const TeacherDetails = () => {
                     <b>Jarimalar</b>
                   </TableCell>
                   <TableCell>
-                    {teacher && parseFloat(teacher.fine).toLocaleString()} so'm
+                    {teacher &&
+                      parseFloat(teacher && teacher.fine).toLocaleString()}{" "}
+                    so'm
                   </TableCell>
                   <TableCell>
-                    <Link to={`/casher/teachers/${teacher.id}/add/fine/`}>
+                    <Link
+                      to={`/casher/teachers/${teacher && teacher.id}/add/fine/`}
+                    >
                       <IconButton sx={{ m: 0, p: 0 }} color="primary">
                         <AddIcon />
                       </IconButton>
@@ -235,7 +244,11 @@ const TeacherDetails = () => {
                     {teacher && parseFloat(teacher.bonus).toLocaleString()} so'm
                   </TableCell>
                   <TableCell>
-                    <Link to={`/casher/teachers/${teacher.id}/add/bonus/`}>
+                    <Link
+                      to={`/casher/teachers/${
+                        teacher && teacher.id
+                      }/add/bonus/`}
+                    >
                       <IconButton sx={{ m: 0, p: 0 }} color="primary">
                         <AddIcon />
                       </IconButton>

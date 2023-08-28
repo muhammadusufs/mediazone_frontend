@@ -34,6 +34,7 @@ import TeacherAddBonus from "./Screens/TeacherAddBonus";
 import TeacherAddDebt from "./Screens/TeacherAddDebt";
 import TeacherAddFine from "./Screens/TeacherAddFine";
 import EditTeacher from "./Screens/EditTeacher";
+import InsertTeacher from "./Screens/InsertTeacher";
 
 const theme = createTheme({
   palette: {
@@ -126,6 +127,10 @@ function App() {
           />
 
           <Route path="casher/teachers/" element={<Teachers />} />
+          <Route
+            path="casher/teachers/create-teacher/"
+            element={<InsertTeacher />}
+          />
           <Route
             path="casher/teachers/:teacher_id/"
             element={<TeacherDetails />}

@@ -22,6 +22,7 @@ import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import TeacherService from "../services/TeacherService";
 import { checkTeacher, setTeacherStats } from "../states/TeacherSlice";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 
 const EditTeacher = () => {
   const { teacher_id } = useParams();
@@ -68,7 +69,12 @@ const EditTeacher = () => {
         navigate(`/casher/teachers/${teacher_id}`);
       }, 1000);
     } catch (error) {
-      handleMessage("error", "Xatolik, qaytadan urining");
+      console.log(error);
+      if (error.code === "ERR_BAD_RESPONSE") {
+        handleMessage("error", "Ushbu raqam bilan oldin ro'yxatdan o'tilgan");
+      } else {
+        handleMessage("error", "Xatolik, qaytadan urining");
+      }
     }
     setSubmitBtn(false);
   };
@@ -79,15 +85,17 @@ const EditTeacher = () => {
       setProgress(35);
       const response = await TeacherService.get_teacher(teacher_id);
       dispatch(checkTeacher(response.data));
+      setTeacherName(response.data.name);
+      setTeacherPhone(response.data.phone);
       if (response.status === 200) {
         const stats = await TeacherService.get_teacher_stats(teacher_id);
         dispatch(setTeacherStats(stats.data));
       }
       setProgress(80);
     } catch (error) {
-      setProgress(35);
-      handleMessage("error", "Xatolik, qaytadan urining");
       setProgress(80);
+
+      handleMessage("error", "Xatolik, qaytadan urining");
     }
     setProgress(100);
   };

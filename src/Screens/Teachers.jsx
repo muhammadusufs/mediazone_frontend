@@ -117,13 +117,14 @@ const Teachers = () => {
         </Breadcrumbs>
 
         <div>
-          <TextField label="Qidirish" size="small" sx={{ mr: 1 }} />
-          <Button
-            variant="contained"
-            startIcon={<AddCircleOutlineOutlinedIcon />}
-          >
-            Yangi o'qituvchi
-          </Button>
+          <Link to={"create-teacher/"} style={{ textDecoration: "none" }}>
+            <Button
+              variant="contained"
+              startIcon={<AddCircleOutlineOutlinedIcon />}
+            >
+              Yangi o'qituvchi
+            </Button>
+          </Link>
         </div>
       </div>
 

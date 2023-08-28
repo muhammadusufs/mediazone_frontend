@@ -42,10 +42,13 @@ const TeacherService = {
   },
 
   async update_teacher(teacher_id, name, phone) {
-    const response = await axios.patch(`client/teachers/${teacher_id}/`, {
-      name,
-      phone,
-    });
+    const response = await axios.patch(
+      `client/actions/teachers/${teacher_id}/edit/`,
+      {
+        name,
+        phone,
+      }
+    );
     return response.status;
   },
 
@@ -53,6 +56,15 @@ const TeacherService = {
     const response = await axios.delete(
       `client/actions/teachers/${teacher_id}/delete/`
     );
+    return response.status;
+  },
+
+  async create_teacher(name, phone, password) {
+    const response = await axios.post(`client/actions/teachers/insert/`, {
+      name,
+      username: phone,
+      phone,
+    });
     return response.status;
   },
 };
