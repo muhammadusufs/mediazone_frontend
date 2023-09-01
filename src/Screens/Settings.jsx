@@ -7,30 +7,69 @@ import {
   Typography,
   Breadcrumbs,
   TextField,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Button,
-  IconButton,
-  MenuItem,
   Divider,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
-import { Link } from "react-router-dom";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import { Link, useNavigate } from "react-router-dom";
+import AuthService from "../services/AuthService";
+import { useDispatch, useSelector } from "react-redux";
 
 const Settings = () => {
+  const { user } = useSelector((state) => state.auth);
+
   const [sid, setSid] = useState("");
+  const [name, setName] = useState(user ? user.name : "");
+  const [number, setNumber] = useState(user ? user.phone : "");
+  const [progress, setProgress] = useState(0);
+  const [btn, setBtn] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleMessage = (ttype, msg) => {
+    setAlertType(ttype);
+    setAlertMessage(msg);
+    setOpen(true);
+  };
+
   const handle = (value) => {
     setSid(value);
   };
 
+  const updateUser = async (e) => {
+    e.preventDefault();
+    setBtn(true);
+    setProgress(25);
+    try {
+      setProgress(40);
+      const response = await AuthService.updateUser(name, number);
+      if (response.status === 200) {
+        handleMessage("success", "Ma'lumotlar yangilandi");
+        AuthService.logOut();
+        setTimeout(() => {
+          navigate("/login");
+        });
+      }
+    } catch (error) {
+      handleMessage("error", "Ushbu raqam orqali ro'yxatdan o'tilgan");
+    }
+    setBtn(false);
+  };
+
   return (
-    <Layout url="settings">
+    <Layout url="settings" progress={progress}>
       <div style={{ marginTop: "8px" }}>
         <Breadcrumbs aria-label="breadcrumb">
           <Link
@@ -65,29 +104,40 @@ const Settings = () => {
             Foydalanuvchi ma'lumotlari
           </h3>
         </Divider>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={12} md={6}>
-            <TextField
-              label="Ism, Familiya"
-              fullWidth
-              helperText={"Foydalanuvchi ismi, familiyasi"}
-            />
-          </Grid>
+        <form onSubmit={updateUser}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={12} md={6}>
+              <TextField
+                label="Ism, Familiya"
+                fullWidth
+                helperText={"Foydalanuvchi ismi, familiyasi"}
+                value={name}
+                onInput={(e) => setName(e.target.value)}
+              />
+            </Grid>
 
-          <Grid item xs={12} sm={12} md={6}>
-            <TextField
-              fullWidth
-              label="Login"
-              helperText={"Foydalanuvchi logini"}
-            />
+            <Grid item xs={12} sm={12} md={6}>
+              <TextField
+                fullWidth
+                label="Telefon raqam, login"
+                helperText={"Foydalanuvchi logini"}
+                value={number}
+                onInput={(e) => setNumber(e.target.value)}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-        <Button variant="contained" sx={{ my: 1 }}>
-          Saqlash
-        </Button>
+          <Button
+            type="submit"
+            disabled={btn}
+            variant="contained"
+            sx={{ my: 1 }}
+          >
+            Saqlash
+          </Button>
+        </form>
       </Paper>
 
-      <Paper elevation={3} sx={{ p: 3, mt: 5 }}>
+      {/* <Paper elevation={3} sx={{ p: 3, mt: 5 }}>
         <Divider>
           <h3
             style={{
@@ -129,7 +179,16 @@ const Settings = () => {
         <Button variant="contained" sx={{ my: 1 }}>
           O'zgartirish
         </Button>
-      </Paper>
+      </Paper> */}
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity={alertType}
+          sx={{ width: "100%" }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </Layout>
   );
 };

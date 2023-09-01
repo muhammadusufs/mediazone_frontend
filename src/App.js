@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { getItem, removeItem } from "./utils/storage";
 
 // Slices
-import { getUser, loginSuccess } from "./states/AuthSlices";
+import { getUser, loginSuccess, setCompany } from "./states/AuthSlices";
 
 // Services
 import AuthService from "./services/AuthService";
@@ -35,6 +35,8 @@ import TeacherAddDebt from "./Screens/TeacherAddDebt";
 import TeacherAddFine from "./Screens/TeacherAddFine";
 import EditTeacher from "./Screens/EditTeacher";
 import InsertTeacher from "./Screens/InsertTeacher";
+import InsertExpense from "./Screens/InsertExpense";
+import Suspended from "./Screens/Suspended";
 
 const theme = createTheme({
   palette: {
@@ -75,6 +77,11 @@ function App() {
       const response = await AuthService.getUser(jwt_decode(t).user_id);
       dispatch(loginSuccess(getItem("token")));
       dispatch(getUser(response.data));
+      const company = await AuthService.getCompany();
+      dispatch(setCompany(company.data));
+      if (company.data.company.is_active === false) {
+        navigate("/suspended");
+      }
     } catch (error) {
       removeItem("token");
     }
@@ -94,6 +101,8 @@ function App() {
       <Routes>
         <Route element={<PrivateRoutes account="casher" />}>
           <Route path="casher/" element={<Home />} />
+          <Route path="/" element={<Home />} />
+
           <Route
             path="casher/payment/:student_id/:month/:group_id/"
             element={<Payment />}
@@ -157,10 +166,15 @@ function App() {
           />
 
           <Route path="casher/expenses/" element={<Expenses />} />
+          <Route
+            path="casher/expenses/add-expense/"
+            element={<InsertExpense />}
+          />
           <Route path="casher/sale/" element={<History />} />
           <Route path="casher/settings/" element={<Settings />} />
         </Route>
         <Route element={<Login />} path="/login"></Route>
+        <Route element={<Suspended />} path="/suspended"></Route>
       </Routes>
     </ThemeProvider>
   );

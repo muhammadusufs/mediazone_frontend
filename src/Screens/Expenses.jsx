@@ -1,5 +1,9 @@
+// Library imports
+import moment from "moment";
+import "moment/locale/uz-latn";
+
 // Components
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
 import {
   Grid,
@@ -17,6 +21,9 @@ import {
   IconButton,
   MenuItem,
   Divider,
+  Snackbar,
+  Alert,
+  Skeleton,
 } from "@mui/material";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
@@ -27,12 +34,75 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import { AddCard } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { expenseStart, expenseSuccess } from "../states/ExpenseSlice";
+import ExpenseService from "../services/ExpenseService";
 
 const Expenses = () => {
   const [sid, setSid] = useState("");
+  const [progress, setProgress] = useState("");
+  const [month, setMonth] = useState(getDate());
+  const [btn, setBtn] = useState(false);
+
+  const { expenses, loading } = useSelector((state) => state.expenses);
+
+  const dispatch = useDispatch();
   const handle = (value) => {
     setSid(value);
   };
+
+  const [open, setOpen] = useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleMessage = (ttype, msg) => {
+    setAlertType(ttype);
+    setAlertMessage(msg);
+    setOpen(true);
+  };
+
+  function getDate() {
+    const today = new Date();
+    if (String(today.getMonth()).length === 1) {
+      return `0${today.getMonth() + 1}`;
+    } else {
+      return today.getMonth() + 1;
+    }
+  }
+
+  const getExpenses = async () => {
+    setProgress(25);
+    dispatch(expenseStart());
+    try {
+      setProgress(40);
+      const response = await ExpenseService.get_expenses();
+      dispatch(expenseSuccess(response.data));
+    } catch (error) {
+      handleMessage("error", "Xatolik, qaytadan urining");
+    }
+  };
+
+  const getExpensesByMonth = async () => {
+    setProgress(25);
+    setBtn(true);
+    dispatch(expenseStart());
+    try {
+      setProgress(40);
+      const response = await ExpenseService.get_expenses(month);
+      dispatch(expenseSuccess(response.data));
+    } catch (error) {
+      handleMessage("error", "Xatolik, qaytadan urining");
+    }
+    setBtn(false);
+  };
+
+  useEffect(() => {
+    getExpenses();
+  }, []);
 
   const months = [
     {
@@ -118,13 +188,17 @@ const Expenses = () => {
         </Breadcrumbs>
 
         <div>
-          <TextField label="Qidirish" size="small" sx={{ mr: 1 }} />
-          <Button
-            variant="contained"
-            startIcon={<AddCircleOutlineOutlinedIcon />}
+          <Link
+            style={{ textDecoration: "none" }}
+            to={"/casher/expenses/add-expense/"}
           >
-            Yangi harajat
-          </Button>
+            <Button
+              variant="contained"
+              startIcon={<AddCircleOutlineOutlinedIcon />}
+            >
+              Yangi harajat
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -136,7 +210,8 @@ const Expenses = () => {
             label="Oy"
             size="small"
             sx={{ mr: 1 }}
-            defaultValue="01"
+            defaultValue={month}
+            onChange={(e) => setMonth(e.target.value)}
             helperText="Oy bo'yicha harajatlarni filterlash"
           >
             {months.map((option) => (
@@ -145,7 +220,12 @@ const Expenses = () => {
               </MenuItem>
             ))}
           </TextField>
-          <Button startIcon={<SearchIcon />} variant="contained">
+          <Button
+            disabled={btn}
+            onClick={getExpensesByMonth}
+            startIcon={<SearchIcon />}
+            variant="contained"
+          >
             Aniqlash
           </Button>
         </div>
@@ -155,19 +235,97 @@ const Expenses = () => {
             <TableHead>
               <TableRow>
                 <TableCell colSpan={2}>Harajat</TableCell>
-                <TableCell align="right">Miqdori</TableCell>
-                <TableCell align="right">Sana</TableCell>
+                <TableCell>Miqdori</TableCell>
+                <TableCell>Sana</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>1</TableCell>
-                <TableCell>Televizor</TableCell>
-                <TableCell align="right">2 500 000 so'm </TableCell>
-                <TableCell align="right">
-                  5-aprel, Seshanba, 2023-yil{" "}
-                </TableCell>
-              </TableRow>
+              {loading ? (
+                <>
+                  <TableRow>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                  </TableRow>
+                </>
+              ) : (
+                <>
+                  {expenses.length > 0 ? (
+                    expenses.map((expense, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{expense.comment}</TableCell>
+                        <TableCell>
+                          {parseFloat(expense.amount).toLocaleString()} so'm
+                        </TableCell>
+                        <TableCell>
+                          {moment(expense.date).format("LLLL")}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4} style={{ textAlign: "center" }}>
+                        Ushbu oyda harajatlar mavjud emas
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -180,15 +338,17 @@ const Expenses = () => {
           onPageChange={}
           onRowsPerPageChange={}
         /> */}
-        <Typography
-          variant="subtitle2"
-          color={"dark.main"}
-          sx={{ mt: 3 }}
-          display="block"
-        >
-          JAMI <b>2 500 000 so'm</b>
-        </Typography>
       </Paper>
+
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity={alertType}
+          sx={{ width: "100%" }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </Layout>
   );
 };

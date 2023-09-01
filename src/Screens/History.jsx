@@ -1,5 +1,9 @@
+// Library imports
+import moment from "moment";
+import "moment/locale/uz-latn";
+
 // Components
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
 import {
   Grid,
@@ -14,78 +18,87 @@ import {
   TableCell,
   TableBody,
   Button,
-  IconButton,
-  MenuItem,
   Divider,
+  Snackbar,
+  Alert,
+  Skeleton,
 } from "@mui/material";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
 import { Link } from "react-router-dom";
 import WorkHistoryOutlinedIcon from "@mui/icons-material/WorkHistoryOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import SearchIcon from "@mui/icons-material/Search";
-import { AddCard } from "@mui/icons-material";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
+import HistoryService from "../services/HistoryService";
+import { historyStart, historySuccess } from "../states/HistorySlices";
+import { useDispatch, useSelector } from "react-redux";
 
 const History = () => {
   const [sid, setSid] = useState("");
+  const [date, setDate] = useState();
+  const [progress, setProgress] = useState(0);
+  const [btn, setBtn] = useState(false);
+  const dispatch = useDispatch();
+
+  const [open, setOpen] = useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const { histories, loading } = useSelector((state) => state.histories);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  function getDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are zero-based, so add 1
+    const day = String(today.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  const handleMessage = (ttype, msg) => {
+    setAlertType(ttype);
+    setAlertMessage(msg);
+    setOpen(true);
+  };
+
   const handle = (value) => {
     setSid(value);
   };
 
-  const months = [
-    {
-      value: "01",
-      label: "Yanvar",
-    },
-    {
-      value: "02",
-      label: "Fevral",
-    },
-    {
-      value: "03",
-      label: "Mart",
-    },
-    {
-      value: "04",
-      label: "Aprel",
-    },
-    {
-      value: "05",
-      label: "May",
-    },
-    {
-      value: "06",
-      label: "Iyun",
-    },
-    {
-      value: "07",
-      label: "Iyul",
-    },
-    {
-      value: "08",
-      label: "Avgust",
-    },
-    {
-      value: "09",
-      label: "Sentyabr",
-    },
-    {
-      value: "10",
-      label: "Oktyabr",
-    },
+  const getHistory = async () => {
+    setProgress(25);
+    dispatch(historyStart());
+    try {
+      setProgress(40);
+      const response = await HistoryService.get_histories();
+      dispatch(historySuccess(response.data));
+    } catch (error) {
+      handleMessage("error", "Xatolik, qaytadan urining");
+    }
+  };
 
-    {
-      value: "11",
-      label: "Noyabr",
-    },
+  useEffect(() => {
+    console.log(getDate());
+    getHistory();
+  }, []);
 
-    {
-      value: "12",
-      label: "Dekabr",
-    },
-  ];
+  const getHistoryByDate = async () => {
+    console.log(date);
+    setProgress(25);
+    setBtn(true);
+    dispatch(historyStart());
+    try {
+      setProgress(40);
+      const response = await HistoryService.get_histories(date);
+      dispatch(historySuccess(response.data));
+    } catch (error) {
+      handleMessage("error", "Xatolik, qaytadan urining");
+    }
+    setBtn(false);
+  };
 
   return (
     <Layout url="sale">
@@ -116,10 +129,6 @@ const History = () => {
             Tarix
           </Typography>
         </Breadcrumbs>
-
-        <div>
-          <TextField label="Qidirish" size="small" sx={{ mr: 1 }} />
-        </div>
       </div>
 
       <Paper elevation={3} sx={{ p: 3, mt: 5 }}>
@@ -129,9 +138,16 @@ const History = () => {
             type="date"
             size="small"
             sx={{ mr: 1 }}
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
             helperText="Sana bo'yicha harajatlarni filterlash"
           />
-          <Button startIcon={<SearchIcon />} variant="contained">
+          <Button
+            disabled={btn}
+            onClick={getHistoryByDate}
+            startIcon={<SearchIcon />}
+            variant="contained"
+          >
             Aniqlash
           </Button>
         </div>
@@ -144,26 +160,99 @@ const History = () => {
                 <TableCell align="right">Guruh</TableCell>
                 <TableCell align="right">To'lov miqdori</TableCell>
                 <TableCell align="right">Sana</TableCell>
-                <TableCell align="right">
-                  O'zgartirish uchun so'rov yuborish
-                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>1</TableCell>
-                <TableCell>JS Rustev</TableCell>
-                <TableCell align="right">IT MASTERS </TableCell>
-                <TableCell align="right">500 000 so'm </TableCell>
-                <TableCell align="right">
-                  5-aprel, Seshanba, 2023-yil{" "}
-                </TableCell>
-                <TableCell align="right">
-                  <Button startIcon={<SendOutlinedIcon />} variant="contained">
-                    So'rov yuborish
-                  </Button>
-                </TableCell>
-              </TableRow>
+              {loading ? (
+                <>
+                  <TableRow>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="rounded" animation="wave" />
+                    </TableCell>
+                  </TableRow>
+                </>
+              ) : (
+                <>
+                  {histories.length > 0 ? (
+                    histories.map((history, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{history.student_name}</TableCell>
+                        <TableCell align="right">
+                          {history.group_name}
+                        </TableCell>
+
+                        <TableCell align="right">
+                          {parseFloat(history.cost).toLocaleString()} so'm
+                        </TableCell>
+                        <TableCell align="right">
+                          {moment(history.created_at).format("LLLL")}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5} style={{ textAlign: "center" }}>
+                        Bu sanada harajatlar mavjud emas
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -185,6 +274,15 @@ const History = () => {
           JAMI <b>2 500 000 so'm</b>
         </Typography>
       </Paper>
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity={alertType}
+          sx={{ width: "100%" }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </Layout>
   );
 };

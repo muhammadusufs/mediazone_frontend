@@ -17,6 +17,11 @@ const AuthService = {
     return response;
   },
 
+  async getCompany() {
+    const response = await axios.post(`client/actions/get-company/`);
+    return response;
+  },
+
   // change password +
   async changePassword(id, password, oldPassword) {
     const response = await axios.post(`user/change-password/`, {
@@ -29,6 +34,13 @@ const AuthService = {
   // log out user +
   logOut() {
     removeItem("token");
+  },
+  async updateUser(name, number) {
+    const response = await axios.patch(`client/actions/edit-user/`, {
+      name,
+      phone: number,
+    });
+    return response;
   },
 };
 
