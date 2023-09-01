@@ -14,15 +14,19 @@ import {
 
 import brand from "../assets/imgs/logo.png";
 
-const QRCodeBlank = ({}) => (
+const QRCodeBlank = ({ students }) => (
   <Document>
     <Page style={styles.body}>
-      <View style={styles.card}>
-        <Image style={styles.image} src={brand} />
-      </View>
-      <Text style={styles.discount}>
-        Jami chiqim miqdori : {parseFloat(total).toLocaleString()}
-      </Text>
+      {students &&
+        students.map((student) => (
+          <View style={styles.card}>
+            <Image
+              style={styles.image}
+              src={`http://edu.mediazone.uz/django/${student.barcode}.png`}
+            />
+            <Text style={styles.name}>{student.name}</Text>
+          </View>
+        ))}
     </Page>
   </Document>
 );
@@ -34,18 +38,31 @@ Font.register({
 
 const styles = StyleSheet.create({
   body: {
-    paddingTop: 35,
-    paddingBottom: 65,
-    paddingHorizontal: 35,
+    padding: 20,
+    flex: 1,
+    flexDirection: "row",
+    flexGrow: 1,
+    flexWrap: "wrap",
+    rowGap: 15,
+    justifyContent: "space-between",
   },
   card: {
-    display: "inline-block",
-    padding: "15px",
     border: "1px solid #333",
-    margin: "15px",
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    flexGrow: 0,
+    flexShrink: 1,
+    flexBasis: "30%",
   },
   image: {
-    widht: "100%",
+    width: "100%",
+  },
+  name: {
+    fontSize: 14,
+    textAlign: "center",
+    padding: 10,
   },
 });
 export default QRCodeBlank;

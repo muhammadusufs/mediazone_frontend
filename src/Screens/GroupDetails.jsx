@@ -26,6 +26,8 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import GroupService from "../services/GroupService";
 import { useDispatch, useSelector } from "react-redux";
 import { checkGroup, groupStart } from "../states/GroupSlice";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import QRCodeBlank from "../Components/QRCodeBlank";
 
 const GroupDetails = () => {
   const { group_id } = useParams();
@@ -120,6 +122,39 @@ const GroupDetails = () => {
       </div>
 
       <Paper elevation={3} sx={{ p: 3, mt: 5 }}>
+        <PDFDownloadLink
+          style={{ textDecoration: "none" }}
+          document={<QRCodeBlank students={group && group.students} />}
+          fileName={`qrcodes.pdf`}
+        >
+          {({ blob, url, loadings, error }) =>
+            loadings ? (
+              <Button
+                disabled={true}
+                color="warning"
+                variant="contained"
+                sx={{
+                  marginTop: "0",
+                  marginLeft: "15px",
+                }}
+              >
+                PDF Yuklab olish
+              </Button>
+            ) : (
+              <Button
+                color="warning"
+                variant="contained"
+                sx={{
+                  marginTop: "0",
+                  marginLeft: "15px",
+                }}
+              >
+                PDF Yuklab olish
+              </Button>
+            )
+          }
+        </PDFDownloadLink>
+
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -213,6 +248,9 @@ const GroupDetails = () => {
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>
                           {student.name} - {student.student_id}
+                          <img
+                            src={`http://edu.mediazone.uz/django/${student.barcode}.png`}
+                          />
                         </TableCell>
                         <TableCell>{student.phone}</TableCell>
                         <TableCell align="right">
