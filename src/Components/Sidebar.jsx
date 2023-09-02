@@ -139,60 +139,40 @@ const Sidebar = ({ url }) => {
         <div className="mobile-container">
           <div className="menu-list">
             <div className="menu-list-item">
-              <Link to="/">
+              <Link to="/casher/">
                 <AddHomeOutlinedIcon />
                 <span>Bosh sahifa</span>
               </Link>
             </div>
 
             <div className="menu-list-item">
-              <Link to="/debts">
-                <ArrowDropDownCircleOutlinedIcon />
-                <span>Kirimlar</span>
+              <Link to="/casher/data/">
+                <FeedOutlinedIcon />
+                <span>Ma'lumotlar</span>
               </Link>
             </div>
 
             <div className="menu-list-item">
-              <Link to="/credits">
-                <MovingIcon />
-                <span>Chiqimlar</span>
+              <Link to="/casher/teachers/">
+                <AccountCircleOutlinedIcon />
+                <span>O'qituvchilar</span>
               </Link>
             </div>
 
-            <div className="menu-list-item">
-              <Link to="/sales">
-                <WorkOutlineIcon />
-                <span>Savdo</span>
-              </Link>
-            </div>
+            <Link to="/casher/expenses/">
+              <AddCard />
+              <span>Harajatlar</span>
+            </Link>
 
-            <div className="menu-list-item">
-              <Link to="/loans">
-                <CreditCardIcon />
-                <span>Qarzlar</span>
-              </Link>
-            </div>
+            <Link to="/casher/sale/">
+              <WorkHistoryOutlinedIcon />
+              <span>Tarix</span>
+            </Link>
 
-            <div className="menu-list-item">
-              <Link to="/clients">
-                <SupervisedUserCircleIcon />
-                <span>Mijozlar</span>
-              </Link>
-            </div>
-
-            <div className="menu-list-item">
-              <Link to="/workers">
-                <EngineeringIcon />
-                <span>Ishchilar</span>
-              </Link>
-            </div>
-
-            <div className="menu-list-item">
-              <Link to="/settings">
-                <SettingsOutlinedIcon />
-                <span>Sozlamalar</span>
-              </Link>
-            </div>
+            <Link to="/casher/settings/">
+              <SettingsOutlinedIcon />
+              <span>Sozlamalar</span>
+            </Link>
           </div>
         </div>
       )}
