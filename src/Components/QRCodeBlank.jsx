@@ -1,68 +1,59 @@
-// Library imports
-import moment from "moment";
-import "moment/locale/uz-latn";
-
-import {
-  Page,
-  Document,
-  Image,
-  Text,
-  View,
-  StyleSheet,
-  Font,
-} from "@react-pdf/renderer";
-
+import { useDispatch, useSelector } from "react-redux";
 import brand from "../assets/imgs/logo.png";
+import { useParams } from "react-router-dom";
+import { checkGroup, groupStart } from "../states/GroupSlice";
+import GroupService from "../services/GroupService";
+import { useEffect } from "react";
+import "../assets/css/print.css";
 
-const QRCodeBlank = ({ students }) => (
-  <Document>
-    <Page style={styles.body}>
-      {students &&
-        students.map((student) => (
-          <View style={styles.card}>
-            <Image
-              style={styles.image}
-              src={`http://edu.mediazone.uz/django/${student.barcode}.png`}
-            />
-            <Text style={styles.name}>{student.name}</Text>
-          </View>
-        ))}
-    </Page>
-  </Document>
-);
+const QRCodeBlank = ({ students }) => {
+  const { group_id } = useParams();
+  const dispatch = useDispatch();
 
-Font.register({
-  family: "Oswald",
-  src: "https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf",
-});
+  const { loading, group } = useSelector((state) => state.groups);
 
-const styles = StyleSheet.create({
-  body: {
-    padding: 20,
-    flex: 1,
-    flexDirection: "row",
-    flexGrow: 1,
-    flexWrap: "wrap",
-    rowGap: 15,
-    justifyContent: "space-between",
-  },
-  card: {
-    border: "1px solid #333",
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    flexGrow: 0,
-    flexShrink: 1,
-    flexBasis: "30%",
-  },
-  image: {
-    width: "100%",
-  },
-  name: {
-    fontSize: 14,
-    textAlign: "center",
-    padding: 10,
-  },
-});
+  const getGroup = async () => {
+    dispatch(groupStart());
+    try {
+      const response = await GroupService.check_group(group_id);
+      dispatch(checkGroup(response.data));
+    } catch (error) {
+      alert("Xatolik, qaytadan urining");
+    }
+  };
+
+  useEffect(() => {
+    getGroup();
+  }, []);
+
+  return (
+    <div style={{ padding: 20 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "auto auto auto",
+          columnGap: "10px",
+        }}
+      >
+        {group &&
+          group.students.map((student) => (
+            <div
+              style={{
+                textAlign: "center",
+                border: "1px solid #333",
+                padding: 15,
+              }}
+            >
+              <img
+                style={{ width: "80%" }}
+                src={`https://edu.mediazone.uz/django/${student.barcode}.png`}
+              />
+              <div>{student.name}</div>
+            </div>
+          ))}
+      </div>
+    </div>
+  );
+};
+
 export default QRCodeBlank;

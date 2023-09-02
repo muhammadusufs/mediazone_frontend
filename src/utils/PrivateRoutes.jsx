@@ -1,9 +1,19 @@
 // Hooks
 import { useSelector } from "react-redux";
 
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { getItem } from "./storage";
+import { useEffect } from "react";
 const PrivateRoutes = ({ account }) => {
   const user = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, []);
 
   return (
     <>

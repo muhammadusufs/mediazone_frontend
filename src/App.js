@@ -37,6 +37,7 @@ import EditTeacher from "./Screens/EditTeacher";
 import InsertTeacher from "./Screens/InsertTeacher";
 import InsertExpense from "./Screens/InsertExpense";
 import Suspended from "./Screens/Suspended";
+import QRCodeBlank from "./Components/QRCodeBlank";
 
 const theme = createTheme({
   palette: {
@@ -136,6 +137,8 @@ function App() {
           />
 
           <Route path="casher/teachers/" element={<Teachers />} />
+          <Route path="casher/barcodes/:group_id" element={<QRCodeBlank />} />
+
           <Route
             path="casher/teachers/create-teacher/"
             element={<InsertTeacher />}
@@ -173,6 +176,8 @@ function App() {
           <Route path="casher/sale/" element={<History />} />
           <Route path="casher/settings/" element={<Settings />} />
         </Route>
+        <Route element={<Login />} path="/"></Route>
+
         <Route element={<Login />} path="/login"></Route>
         <Route element={<Suspended />} path="/suspended"></Route>
       </Routes>

@@ -122,38 +122,12 @@ const GroupDetails = () => {
       </div>
 
       <Paper elevation={3} sx={{ p: 3, mt: 5 }}>
-        <PDFDownloadLink
+        <Link
           style={{ textDecoration: "none" }}
-          document={<QRCodeBlank students={group && group.students} />}
-          fileName={`qrcodes.pdf`}
+          to={`/casher/barcodes/${group && group.id}`}
         >
-          {({ blob, url, loadings, error }) =>
-            loadings ? (
-              <Button
-                disabled={true}
-                color="warning"
-                variant="contained"
-                sx={{
-                  marginTop: "0",
-                  marginLeft: "15px",
-                }}
-              >
-                PDF Yuklab olish
-              </Button>
-            ) : (
-              <Button
-                color="warning"
-                variant="contained"
-                sx={{
-                  marginTop: "0",
-                  marginLeft: "15px",
-                }}
-              >
-                PDF Yuklab olish
-              </Button>
-            )
-          }
-        </PDFDownloadLink>
+          <Button variant="contained">Barkodlarni olish</Button>
+        </Link>
 
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">
@@ -248,9 +222,6 @@ const GroupDetails = () => {
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>
                           {student.name} - {student.student_id}
-                          <img
-                            src={`http://edu.mediazone.uz/django/${student.barcode}.png`}
-                          />
                         </TableCell>
                         <TableCell>{student.phone}</TableCell>
                         <TableCell align="right">
