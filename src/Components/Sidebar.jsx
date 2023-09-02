@@ -159,20 +159,25 @@ const Sidebar = ({ url }) => {
               </Link>
             </div>
 
-            <Link to="/casher/expenses/">
-              <AddCard />
-              <span>Harajatlar</span>
-            </Link>
+            <div className="menu-list-item">
+              <Link to="/casher/expenses/">
+                <AddCard />
+                <span>Harajatlar</span>
+              </Link>
+            </div>
 
-            <Link to="/casher/sale/">
-              <WorkHistoryOutlinedIcon />
-              <span>Tarix</span>
-            </Link>
-
-            <Link to="/casher/settings/">
-              <SettingsOutlinedIcon />
-              <span>Sozlamalar</span>
-            </Link>
+            <div className="menu-list-item">
+              <Link to="/casher/sale/">
+                <WorkHistoryOutlinedIcon />
+                <span>Tarix</span>
+              </Link>
+            </div>
+            <div className="menu-list-item">
+              <Link to="/casher/settings/">
+                <SettingsOutlinedIcon />
+                <span>Sozlamalar</span>
+              </Link>
+            </div>
           </div>
         </div>
       )}
