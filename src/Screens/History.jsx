@@ -265,14 +265,6 @@ const History = () => {
           onPageChange={}
           onRowsPerPageChange={}
         /> */}
-        <Typography
-          variant="subtitle2"
-          color={"dark.main"}
-          sx={{ mt: 3 }}
-          display="block"
-        >
-          JAMI <b>2 500 000 so'm</b>
-        </Typography>
       </Paper>
       <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
         <Alert
